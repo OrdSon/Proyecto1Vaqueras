@@ -9,7 +9,7 @@ namespace CrearTxt
     {
         static void Main(string[] args)
         {
-            string[] lines = { "Primera Línea", "Segunda Línea", "Tercera Línea" };
+            string[] lines = { "Primera Linea", "Segunda Linea", "Tercera Linea" };
             System.IO.File.WriteAllLines(@"C:\RutaArchivos\EscribeLineas.txt", lines);
             string text = "A class is the most powerful data type in C#. Like a structure, " +
                            "a class defines the data and behavior of the data type. ";
@@ -26,7 +26,7 @@ namespace CrearTxt
             }
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\RutaArchivos\EscribeLineas2.txt", true))
             {
-                file.WriteLine("Cuarta Línea");
+                file.WriteLine("Cuarta Linea");
             }
         }
     }

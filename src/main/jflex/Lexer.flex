@@ -34,13 +34,14 @@ PLUS = "+"
 MINUS = "-"
 TIMES = "*" 
 DIV = "/"
-ASIGN = "="
 EQUAL = "=="
-NOTEQUAL = "!=" 
+ASIGN = "="
+NOTEQUAL = "!="
+NOT = "!"
+LET = "<="
+LGT = ">=" 
 LT = "<"
 GT = ">"
-LET = "<="
-LGT = ">="
 AND = "&&"
 OR = "||"
 WHILE = "while"
@@ -98,7 +99,7 @@ USING = "using"
 
 <STRING> {
       \"                             { yybegin(YYINITIAL);
-                                       return new Token(TokenConstants.stringValue, yytext());}
+                                       return new Token(TokenConstants.stringValue, string.toString());}
       [^\n\r\"\\]+                   { string.append(yytext()); }
       \\t                            { string.append('\t'); }
       \\n                            { string.append('\n'); }
@@ -122,6 +123,19 @@ USING = "using"
 {cualquierCaracter}* {finDeLinea}?  {/*Absolutamente nada*/}
 }
 
+"("   {return new Token(TokenConstants.LPAREN,yytext());}
+")"   {return new Token(TokenConstants.RPAREN,yytext());}
+","   {return new Token(TokenConstants.COMMA,yytext());}
+";"   {return new Token(TokenConstants.SEMI,yytext());}
+"."   {return new Token(TokenConstants.DOT,yytext());}
+":"   {return new Token(TokenConstants.COLON,yytext());}
+"{"   {return new Token(TokenConstants.LBRACE,yytext());}
+"}"   {return new Token(TokenConstants.RBRACE,yytext());}
+"["   {return new Token(TokenConstants.LBRACKET,yytext());}
+"]"   {return new Token(TokenConstants.RBRACKET,yytext());}
+"~"   {return new Token(TokenConstants.NEG,yytext());}
+"@"   {return new Token(TokenConstants.AT,yytext());}
+"*/"   {return new Token(TokenConstants.ERROR,"unmatched comment finisher");}
 {INT} {return new Token(TokenConstants.INT,yytext());}
 {LONG} {return new Token(TokenConstants.LONG,yytext());}
 {FLOAT} {return new Token(TokenConstants.FLOAT,yytext());}
@@ -137,6 +151,7 @@ USING = "using"
 {ASIGN} {return new Token(TokenConstants.ASIGN,yytext());}
 {EQUAL} {return new Token(TokenConstants.EQUAL,yytext());}
 {NOTEQUAL} {return new Token(TokenConstants.NOTEQUAL,yytext());}
+{NOT} {return new Token(TokenConstants.NOT,yytext());}
 {LT} {return new Token(TokenConstants.LT,yytext());}
 {GT} {return new Token(TokenConstants.GT,yytext());}
 {LET} {return new Token(TokenConstants.LET,yytext());}

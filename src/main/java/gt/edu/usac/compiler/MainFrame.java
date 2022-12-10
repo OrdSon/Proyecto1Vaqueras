@@ -34,7 +34,15 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void init() {
         TextLineNumber textLineNumber = new TextLineNumber(csText);
-        jScrollPane2.setRowHeaderView(textLineNumber);
+        TextLineNumber symTableLineNumber = new TextLineNumber(symTableText);
+        TextLineNumber pythonLineNumber = new TextLineNumber(PythonText);
+        TextLineNumber htmlLineNumber = new TextLineNumber(htmlText);
+        
+        cxTextScrollPane.setRowHeaderView(textLineNumber);
+        symTableTextScrollPane.setRowHeaderView(symTableLineNumber);
+        pythonTextScrollPane.setRowHeaderView(pythonLineNumber);
+        htmlTextScrollPane.setRowHeaderView(htmlLineNumber);
+        
     }
 
     /**
@@ -49,17 +57,17 @@ public class MainFrame extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        symTableTextScrollPane = new javax.swing.JScrollPane();
         symTableText = new javax.swing.JTextPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
+        pythonTextScrollPane = new javax.swing.JScrollPane();
         PythonText = new javax.swing.JTextPane();
         jPanel5 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        htmlTextScrollPane = new javax.swing.JScrollPane();
         htmlText = new javax.swing.JTextPane();
         jPanel7 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        cxTextScrollPane = new javax.swing.JScrollPane();
         csText = new javax.swing.JTextPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -85,12 +93,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(153, 255, 153));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabla de simbolos"));
-        jPanel2.setPreferredSize(new java.awt.Dimension(250, 478));
+        jPanel2.setPreferredSize(new java.awt.Dimension(300, 478));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setViewportView(symTableText);
+        symTableTextScrollPane.setViewportView(symTableText);
 
-        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel2.add(symTableTextScrollPane, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_END);
 
@@ -101,9 +109,9 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Salida Python"));
         jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane4.setViewportView(PythonText);
+        pythonTextScrollPane.setViewportView(PythonText);
 
-        jPanel4.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+        jPanel4.add(pythonTextScrollPane, java.awt.BorderLayout.CENTER);
 
         jPanel3.add(jPanel4);
 
@@ -111,9 +119,9 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Salida HTML"));
         jPanel5.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane3.setViewportView(htmlText);
+        htmlTextScrollPane.setViewportView(htmlText);
 
-        jPanel5.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+        jPanel5.add(htmlTextScrollPane, java.awt.BorderLayout.CENTER);
 
         jPanel3.add(jPanel5);
 
@@ -123,9 +131,9 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Entrada C#"));
         jPanel7.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setViewportView(csText);
+        cxTextScrollPane.setViewportView(csText);
 
-        jPanel7.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel7.add(cxTextScrollPane, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel7, java.awt.BorderLayout.CENTER);
 
@@ -166,6 +174,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem6.setText("Limpiar");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem6);
 
         jMenuBar1.add(jMenu1);
@@ -233,7 +246,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         File archivo = new File("archivo.txt");
         PrintWriter writer;
-        String result = "";
+        StringBuilder result = new StringBuilder();
         try {
             writer = new PrintWriter(archivo);
             writer.print(csText.getText());
@@ -243,16 +256,22 @@ public class MainFrame extends javax.swing.JFrame {
             while (true) {                
                 Token token = lexer.yylex();
                 if (token.tipo() == TokenConstants.EOF) {
-                    result += "FIIIN";
+                    result.append("FIN");
                     System.out.println(result);
+                    symTableText.setText("");
+                    symTableText.setText(result.toString());
                     return;
                 }
-                result+=token.toString();
+                    result.append(token.toString()).append("\n");
             }
                     
-        } catch (Exception e) {
+        } catch (IOException e) {
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        csText.setText("");
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -300,7 +319,9 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextPane PythonText;
     private javax.swing.JTextPane csText;
+    private javax.swing.JScrollPane cxTextScrollPane;
     private javax.swing.JTextPane htmlText;
+    private javax.swing.JScrollPane htmlTextScrollPane;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JMenu jMenu1;
@@ -319,11 +340,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JScrollPane pythonTextScrollPane;
     private javax.swing.JTextPane symTableText;
+    private javax.swing.JScrollPane symTableTextScrollPane;
     // End of variables declaration//GEN-END:variables
 }
