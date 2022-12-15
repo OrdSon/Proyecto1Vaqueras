@@ -80,6 +80,7 @@ FOR = "for"
 
 {digit}+"."{digit}+  {return symbol(MyParserSym.doubleValue, Double.valueOf(yytext()));}
 {digit}+  {return symbol(MyParserSym.intValue, Double.valueOf(yytext()));}
+"."   {return  symbol(MyParserSym.DOT,yytext());}
 "{"   {return  symbol(MyParserSym.LBRACE,yytext());}
 "}"   {return symbol(MyParserSym.RBRACE,yytext());}
 ","   {return symbol(MyParserSym.COMMA,yytext());}
@@ -89,19 +90,32 @@ FOR = "for"
 "*"         {return symbol(MyParserSym.TIMES,yytext());}
 "%"         {return symbol(MyParserSym.MOD,yytext());}
 "/"         {return symbol(MyParserSym.DIV,yytext());}
+":"     {return symbol(MyParserSym.COLON,yytext());}
 "-"         {return symbol(MyParserSym.MINUS,yytext());}
 ";"   {return symbol(MyParserSym.SEMI,yytext());}
 "<" {return symbol(MyParserSym.LT,yytext());}
 ">" {return symbol(MyParserSym.GT,yytext());}
 "<=" {return symbol(MyParserSym.LET,yytext());}
 ">=" {return symbol(MyParserSym.LGT,yytext());}
-
-
+"&" {return symbol(MyParserSym.AND,yytext());}
+"|" {return symbol(MyParserSym.OR,yytext());}
+"!" {return symbol(MyParserSym.NOT,yytext());}
 "int"         {return symbol(MyParserSym.INT,yytext());}
 "while"     {return symbol(MyParserSym.WHILE,yytext());}
 "true"      {return symbol(MyParserSym.TRUE,yytext());}
 "false"     {return symbol(MyParserSym.FALSE,yytext());}
 "do"     {return symbol(MyParserSym.DO,yytext());}
+"if"     {return symbol(MyParserSym.IF,yytext());}
+"else"     {return symbol(MyParserSym.ELSE,yytext());}
+"continue"     {return symbol(MyParserSym.CONTINUE,yytext());}
+"break"     {return symbol(MyParserSym.BREAK,yytext());}
+"return"     {return symbol(MyParserSym.RETURN,yytext());}
+"main"  {return symbol(MyParserSym.MAIN,yytext());}
+"switch" {return symbol(MyParserSym.SWITCH,yytext());}
+"default" {return symbol(MyParserSym.DEFAULT,yytext());}
+"case" {return symbol(MyParserSym.CASE,yytext());}
+"Console" {return symbol(MyParserSym.CONSOLE,yytext());}
+"Write" {return symbol(MyParserSym.WRITE,yytext());}
 
 {FOR} {return symbol(MyParserSym.FOR,yytext());}
 {ASIGN} {return symbol(MyParserSym.ASIGN,yytext());}

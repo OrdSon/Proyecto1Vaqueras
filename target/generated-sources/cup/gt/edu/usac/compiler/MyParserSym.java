@@ -12,31 +12,46 @@ public interface MyParserSym {
   public static final int CHAR = 24;
   public static final int UMINUS = 9;
   public static final int LGT = 30;
+  public static final int CASE = 52;
   public static final int DOUBLE = 21;
   public static final int doubleValue = 32;
+  public static final int CONTINUE = 45;
   public static final int LPAREN = 4;
   public static final int SEMI = 14;
   public static final int INT = 18;
   public static final int FOR = 17;
   public static final int MINUS = 6;
+  public static final int WRITE = 55;
   public static final int RPAREN = 5;
   public static final int identifier = 31;
+  public static final int AND = 43;
+  public static final int NOT = 42;
   public static final int LT = 27;
+  public static final int OR = 44;
   public static final int BOOL = 25;
   public static final int COMMA = 12;
   public static final int DIV = 7;
   public static final int PLUS = 2;
+  public static final int MAIN = 48;
+  public static final int IF = 41;
+  public static final int DOT = 54;
   public static final int EOF = 0;
   public static final int DECIMAL = 22;
+  public static final int RETURN = 47;
   public static final int TRUE = 37;
   public static final int error = 1;
   public static final int NUMBER = 16;
   public static final int MOD = 8;
+  public static final int BREAK = 46;
   public static final int VOID = 13;
   public static final int ERROR = 26;
+  public static final int SWITCH = 50;
   public static final int TIMES = 3;
+  public static final int COLON = 49;
+  public static final int ELSE = 40;
   public static final int LBRACE = 10;
   public static final int WHILE = 36;
+  public static final int DEFAULT = 51;
   public static final int LET = 29;
   public static final int FLOAT = 20;
   public static final int RBRACE = 11;
@@ -47,6 +62,7 @@ public interface MyParserSym {
   public static final int FALSE = 38;
   public static final int charValue = 35;
   public static final int GT = 28;
+  public static final int CONSOLE = 53;
   public static final int DO = 39;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -88,7 +104,23 @@ public interface MyParserSym {
   "WHILE",
   "TRUE",
   "FALSE",
-  "DO"
+  "DO",
+  "ELSE",
+  "IF",
+  "NOT",
+  "AND",
+  "OR",
+  "CONTINUE",
+  "BREAK",
+  "RETURN",
+  "MAIN",
+  "COLON",
+  "SWITCH",
+  "DEFAULT",
+  "CASE",
+  "CONSOLE",
+  "DOT",
+  "WRITE"
   };
 }
 

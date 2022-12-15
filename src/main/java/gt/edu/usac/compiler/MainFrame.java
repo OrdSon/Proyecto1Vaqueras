@@ -5,6 +5,7 @@
 package gt.edu.usac.compiler;
 
 import Extras.TextLineNumber;
+import com.sun.source.tree.BreakTree;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -218,12 +219,13 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-
+        
         try {
             JFileChooser chooser = new JFileChooser();
             int returnVal = chooser.showOpenDialog(this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
+                
                 File file = chooser.getSelectedFile();
                 try ( BufferedReader in = new BufferedReader(new FileReader(file))) {
                     StringBuilder text = new StringBuilder();

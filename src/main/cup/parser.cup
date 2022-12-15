@@ -34,6 +34,23 @@ terminal WHILE;
 terminal TRUE;
 terminal FALSE;
 terminal DO;
+terminal ELSE;
+terminal IF;
+terminal NOT;
+terminal AND;
+terminal OR;
+terminal CONTINUE;
+terminal BREAK;
+terminal RETURN;
+terminal MAIN;
+terminal COLON;
+terminal SWITCH;
+terminal DEFAULT;
+terminal CASE;
+terminal CONSOLE;
+terminal DOT;
+terminal WRITE;
+
 
 /**Simbolos no terminales**/
 non terminal Double expr;
@@ -59,6 +76,20 @@ non terminal valorCondicion;
 non terminal signoCondicion;
 non terminal sentencias;
 non terminal do;
+non terminal if;
+non terminal else;
+non terminal condicionIf;
+non terminal condicionCompleta;
+non terminal signoLogico;
+non terminal sentenciaCiclo;
+non terminal sentenciasCiclo;
+non terminal sentenciaSwitch;
+non terminal sentenciasSwitch;
+non terminal multiCase;
+non terminal switch;
+non terminal identifiers;
+non terminal console;
+
 
 
 
@@ -75,29 +106,63 @@ inicio::= ids:i {:RESULT = i;:}
 |expr:e {:RESULT = e+"";:}
 ;
 
+sentenciasCiclo::=sentenciaCiclo
+|sentenciasCiclo sentenciaCiclo
+;
+
 sentencias::= sentencia
 |sentencias sentencia
 ;
 
-sentencia::=//if
-do
+sentencia::=if
+|do
 |while
 |for
+|switch
 |asignacion
 |declaracion
+|console
 |llamada SEMI
+|RETURN valor SEMI
+|RETURN identifier SEMI
+|RETURN SEMI
+|RETURN llamada
 ;
 
-do::= DO LBRACE sentencias RBRACE  WHILE LPAREN condicion RPAREN SEMI
-|DO LBRACE sentencias RBRACE  WHILE LPAREN identifier RPAREN SEMI
-|DO LBRACE RBRACE  WHILE LPAREN condicion RPAREN SEMI
-|DO LBRACE RBRACE  WHILE LPAREN identifier RPAREN SEMI
+console::= CONSOLE DOT WRITE LPAREN valorCondicion RPAREN SEMI
+;
+
+sentenciaCiclo::= sentencia
+|BREAK
+|CONTINUE
+;
+
+
+if::= IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE
+|IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE ELSE if
+|IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE ELSE LBRACE sentencias RBRACE
+|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE
+|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE ELSE if
+|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE ELSE LBRACE sentencias RBRACE
+|IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE ELSE LBRACE RBRACE
+|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE ELSE LBRACE RBRACE
+;
+
+condicionCompleta ::= condicionIf
+|condicionCompleta signoLogico condicionIf
+;
+
+condicionIf::=condicion
+|identifier
+|NOT identifier
+;
+
+do::= DO LBRACE sentencias RBRACE  WHILE LPAREN condicionCompleta RPAREN SEMI
+|DO LBRACE RBRACE  WHILE LPAREN condicionCompleta RPAREN SEMI
 ;
 //********WHILE**********
-while::= WHILE LPAREN condicion RPAREN LBRACE sentencias RBRACE
-|WHILE LPAREN identifier RPAREN LBRACE sentencias RBRACE
-|WHILE LPAREN condicion RPAREN LBRACE  RBRACE
-|WHILE LPAREN identifier RPAREN LBRACE RBRACE
+while::= WHILE LPAREN condicionCompleta RPAREN LBRACE sentenciasCiclo RBRACE
+|WHILE LPAREN condicionCompleta RPAREN LBRACE  RBRACE
 ;
 
 condicion::= valorCondicion signoCondicion valorCondicion
@@ -107,15 +172,22 @@ condicion::= valorCondicion signoCondicion valorCondicion
 
 valorCondicion::= identifier
 |valor
+|llamada
+;
+
+signoLogico::=AND AND
+|OR OR
 ;
 
 signoCondicion::=LT
 |GT
 |LET
 |LGT
+|ASIGN ASIGN
+|NOT ASIGN
 ;
 //********FOR**********
-for::=FOR LPAREN declaracionFor RPAREN LBRACE sentencias RBRACE
+for::=FOR LPAREN declaracionFor RPAREN LBRACE sentenciasCiclo RBRACE
 |FOR LPAREN declaracionFor RPAREN LBRACE  RBRACE
 ;
 
@@ -126,17 +198,32 @@ declaracionFor::= tipo identifier ASIGN valor SEMI identifier LT valor SEMI iden
 forVariation::= PLUS PLUS
 |MINUS MINUS
 ;
+//********SWITCH**************
+
+switch::= SWITCH LPAREN identifier RPAREN LBRACE multiCase DEFAULT COLON sentencias BREAK SEMI RBRACE
+;
+
+multiCase::= CASE valorCondicion COLON sentencias BREAK SEMI multiCase
+|CASE valorCondicion COLON sentencias multiCase
+|CASE valorCondicion COLON sentencias BREAK SEMI 
+|CASE valorCondicion COLON sentencias 
+;
+
+
 //********ASIGNACION**********
-asignacion::=tipo identifier ASIGN llamada SEMI
-|identifier ASIGN valor SEMI
+asignacion::=identifier ASIGN valor SEMI
 |identifier ASIGN llamada SEMI
 ;
 
 //********DECLARACION**********
-declaracion::=tipo identifier SEMI
-|tipo identifier ASIGN valor SEMI
-|tipo identifier ASIGN identifier SEMI
+declaracion::=tipo identifiers SEMI
+|tipo identifiers ASIGN valorCondicion SEMI
 ;
+
+identifiers::= identifier
+|identifiers COMMA identifier
+;
+
 //********LLAMADA**********
 llamada::=identifier LPAREN RPAREN 
 |identifier LPAREN atributos RPAREN
@@ -164,7 +251,11 @@ ids::= tipo:i identifier:t LPAREN RPAREN LBRACE  sentencias RBRACE{:System.out.p
 |tipo:i identifier:t LPAREN params RPAREN LBRACE  RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
 |VOID identifier:t LPAREN  RPAREN LBRACE  RBRACE{:System.out.println(t);RESULT=t;:}
 |VOID identifier:t LPAREN params RPAREN LBRACE   RBRACE{:System.out.println(t);RESULT=t;:}
+|VOID MAIN LPAREN RPAREN LBRACE  sentencias RBRACE
+|VOID MAIN LPAREN RPAREN LBRACE RBRACE
 ;
+
+
 
 //********EXPRESION**********
 expr::= expr:e1 PLUS expr:e2 {:RESULT = new Double(e1.doubleValue() + e2.doubleValue());:}
