@@ -1,28 +1,9 @@
 package gt.edu.usac.compiler;
 import java_cup.runtime.*;
-import java.util.LinkedList;
-import Data.*;
 
-
-//CODIGO PARA INSERTAR EN JAVA
-parser code {:
-        
-    LinkedList<Parametro> currentParams = new LinkedList<>();
-    
-
-
-    private int count = 0;
-
-    private void increaseCount() {
-        count++;
-    }
-    
-    public int getCount() {
-        return count;
-    }
-
-
-    public void report_error(String message, Object info) {
+class MyParser;
+parser code{:
+ public void report_error(String message, Object info) {
         System.out.println("public void report_error");
     }
     
@@ -31,60 +12,189 @@ parser code {:
     }
 
     public void syntax_error(Symbol cur_token) {
-        System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
+        System.out.println("El error es el simbolo: " + MyParserSym.terminalNames[cur_token.sym]);
         System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
     }
 
     public void unrecovered_syntax_error(Symbol cur_token) {
-        if (cur_token.sym == sym.EOF) {
+        if (cur_token.sym == MyParserSym.EOF) {
             System.out.println("public void unrecoveredsyntax_error");
         }
     }
 :}
-/*
-*
-*Seccion de terminales
-*/
-terminal LPAREN,RPAREN,COMMA,SEMI,DOT,COLON,LBRACE,RBRACE,LBRACKET,RBRACKET,NEG,AT;
+/**Simbolos terminales**/
+terminal PLUS, TIMES, LPAREN, RPAREN, MINUS, DIV, MOD, UMINUS;
+terminal LBRACE, RBRACE, COMMA, VOID,SEMI, ASIGN;
+terminal Double NUMBER,FOR;
 terminal INT,LONG,FLOAT,DOUBLE,DECIMAL,STRING;
-terminal CHAR,BOOL,PLUS,MINUS,TIMES,DIV;
-//terminal ASIGN,EQUAL,NOTEQUAL,NOT,LT,GT;
-//terminal LET,LGT,AND,OR,WHILE,DO;
-//terminal FOR,FOREACH,CONTINUE,BREAK,IN,OBJECT;
-//terminal CLASS,SWITCH,CASE,DEFAULT,TRY,CATCH;
-//terminal FINALLY,PRIVATE,NAMESPACE,PUBLIC,PROTECTED,RETURN;
-//terminal NULL,IF,ELSE,TRUE,FALSE,GET;
-//terminal VOID,TYPEOF,INTERFACE,OVERRIDE,STRUCT,THROW;
-//terminal REF,ENUM,CONST,STATIC,THIS,IS;
-//terminal NEW,USING;
-terminal double doubleValue;
-terminal int intValue;
+terminal CHAR,BOOL,ERROR, LT, GT, LET, LGT;
 terminal String identifier;
-terminal char charValue;
+terminal doubleValue, stringValue, intValue, charValue;
+terminal WHILE;
+terminal TRUE;
+terminal FALSE;
+terminal DO;
 
-nonterminal funcion;
-nonterminal Tipo tipo; 
-nonterminal ParamList params;
-nonterminal Parametro param;
+/**Simbolos no terminales**/
+non terminal Double expr;
+non terminal String inicio;
+non terminal String funcion;
+non terminal String tipo;
+non terminal String ids;
+non terminal String params;
+non terminal String param;
+non terminal declaracion;
+non terminal llamada;
+non terminal atributos;
+non terminal sentencia;
+non terminal valor;
+non terminal asignacion;
+non terminal String tipoFun;
+non terminal for;
+non terminal forVariation;
+non terminal declaracionFor;
+non terminal while;
+non terminal condicion;
+non terminal valorCondicion;
+non terminal signoCondicion;
+non terminal sentencias;
+non terminal do;
 
-//Seccion de No terminales
 
-funcion::= tipo:t identifier:i LPAREN params:ps RPAREN{:RESULT = new Funcion(t,i,(ParamList)ps);:}
+
+
+/*Precedencia*/
+precedence left PLUS, MINUS;
+precedence left TIMES, DIV, MOD;
+precedence left UMINUS;
+
+start with inicio;
+
+inicio::= ids:i {:RESULT = i;:}
+|sentencias
+|expr:e {:RESULT = e+"";:}
 ;
 
-params::=param:p {:RESULT = new ParamList().append((Parametro)p);:}
-|params:ps COMMA param:p {:RESULT = (ParamList)ps.append((Parametro)p);:}
+sentencias::= sentencia
+|sentencias sentencia
 ;
 
-param::=tipo:t identifier:i {:RESULT = new Parametro((Tipo)t,i);:}
+sentencia::=//if
+do
+|while
+|for
+|asignacion
+|declaracion
+|llamada SEMI
 ;
 
-tipo::=INT    {:RESULT = Tipo.INT;:}
-|LONG   {:RESULT = Tipo.LONG;:}
-    |FLOAT  {:RESULT = Tipo.FLOAT;:}
-    |DOUBLE {:RESULT = Tipo.DOUBLE;:}
-    |DECIMAL{:RESULT = Tipo.DECIMAL;:} 
-    |STRING {:RESULT = Tipo.STRING;:}
-    |CHAR   {:RESULT = Tipo.CHAR;:}
-    |BOOL   {:RESULT = Tipo.BOOL;:}
+do::= DO LBRACE sentencias RBRACE  WHILE LPAREN condicion RPAREN SEMI
+|DO LBRACE sentencias RBRACE  WHILE LPAREN identifier RPAREN SEMI
+|DO LBRACE RBRACE  WHILE LPAREN condicion RPAREN SEMI
+|DO LBRACE RBRACE  WHILE LPAREN identifier RPAREN SEMI
 ;
+//********WHILE**********
+while::= WHILE LPAREN condicion RPAREN LBRACE sentencias RBRACE
+|WHILE LPAREN identifier RPAREN LBRACE sentencias RBRACE
+|WHILE LPAREN condicion RPAREN LBRACE  RBRACE
+|WHILE LPAREN identifier RPAREN LBRACE RBRACE
+;
+
+condicion::= valorCondicion signoCondicion valorCondicion
+|TRUE
+|FALSE
+;
+
+valorCondicion::= identifier
+|valor
+;
+
+signoCondicion::=LT
+|GT
+|LET
+|LGT
+;
+//********FOR**********
+for::=FOR LPAREN declaracionFor RPAREN LBRACE sentencias RBRACE
+|FOR LPAREN declaracionFor RPAREN LBRACE  RBRACE
+;
+
+declaracionFor::= tipo identifier ASIGN valor SEMI identifier LT valor SEMI identifier forVariation
+|identifier ASIGN valor SEMI identifier LT valor SEMI identifier forVariation
+;
+
+forVariation::= PLUS PLUS
+|MINUS MINUS
+;
+//********ASIGNACION**********
+asignacion::=tipo identifier ASIGN llamada SEMI
+|identifier ASIGN valor SEMI
+|identifier ASIGN llamada SEMI
+;
+
+//********DECLARACION**********
+declaracion::=tipo identifier SEMI
+|tipo identifier ASIGN valor SEMI
+|tipo identifier ASIGN identifier SEMI
+;
+//********LLAMADA**********
+llamada::=identifier LPAREN RPAREN 
+|identifier LPAREN atributos RPAREN
+;
+
+//********ATRIBUTOS**********
+atributos::=identifier
+|atributos identifier
+;
+
+
+params::= param
+|params COMMA param
+;
+
+param::= tipo identifier
+;
+
+//********FUNCION**********
+ids::= tipo:i identifier:t LPAREN RPAREN LBRACE  sentencias RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|tipo:i identifier:t LPAREN params RPAREN LBRACE sentencias RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|VOID identifier:t LPAREN  RPAREN LBRACE sentencias RBRACE{:System.out.println(t);RESULT=t;:}
+|VOID identifier:t LPAREN params RPAREN LBRACE  sentencias RBRACE{:System.out.println(t);RESULT=t;:}
+|tipo:i identifier:t LPAREN RPAREN LBRACE   RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|tipo:i identifier:t LPAREN params RPAREN LBRACE  RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|VOID identifier:t LPAREN  RPAREN LBRACE  RBRACE{:System.out.println(t);RESULT=t;:}
+|VOID identifier:t LPAREN params RPAREN LBRACE   RBRACE{:System.out.println(t);RESULT=t;:}
+;
+
+//********EXPRESION**********
+expr::= expr:e1 PLUS expr:e2 {:RESULT = new Double(e1.doubleValue() + e2.doubleValue());:}
+    | PLUS PLUS expr:e1      {:RESULT = new Double(e1.doubleValue()+1);:}
+    | expr:e1 MINUS expr:e2  {:RESULT = new Double(e1.doubleValue() - e2.doubleValue());:} 
+    | expr:e1 TIMES expr:e2  {:RESULT = new Double(e1.doubleValue() * e2.doubleValue());:}
+    | expr:e1 DIV expr:e2    {:if(e2.doubleValue()!=0){RESULT = new Double(e1.doubleValue() / e2.doubleValue());}:}
+    | expr:e1 MOD expr:e2    {:RESULT = new Double(e1.doubleValue() % e2.doubleValue());:}
+    | MINUS expr:e {: RESULT = new Double(e.doubleValue());:} %prec UMINUS
+    | LPAREN expr:e RPAREN {:RESULT = e;:}
+    | NUMBER:e {:RESULT = e;:}
+;
+valor::= NUMBER
+    |doubleValue
+    |intValue
+    |charValue
+    |stringValue
+;
+
+tipo::=INT {:System.out.println("INT");RESULT = "INT";:}
+    |LONG   {:System.out.println("LONG");RESULT ="LONG";:}
+    |FLOAT  {:System.out.println("FLOAT");RESULT ="FLOAT";:}
+    |DOUBLE {:System.out.println("DOUBLE");RESULT ="DOUBLE";:}
+    |DECIMAL{:System.out.println("DECIMAL");RESULT ="DECIMAL";:} 
+    |STRING {:System.out.println("STRING");RESULT ="STRING";:}
+    |CHAR   {:System.out.println("CHAR");RESULT ="CHAR";:}
+    |BOOL   {:System.out.println("BOOL");RESULT ="BOOL";:}
+    |identifier:i {:System.out.println(i); RESULT = i;:}
+;
+tipoFun::= tipo
+    |VOID   {:System.out.println("VOID");RESULT ="VOID";:}
+;
+

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,12 +38,12 @@ public class MainFrame extends javax.swing.JFrame {
         TextLineNumber symTableLineNumber = new TextLineNumber(symTableText);
         TextLineNumber pythonLineNumber = new TextLineNumber(PythonText);
         TextLineNumber htmlLineNumber = new TextLineNumber(htmlText);
-        
+
         cxTextScrollPane.setRowHeaderView(textLineNumber);
         symTableTextScrollPane.setRowHeaderView(symTableLineNumber);
         pythonTextScrollPane.setRowHeaderView(pythonLineNumber);
         htmlTextScrollPane.setRowHeaderView(htmlLineNumber);
-        
+
     }
 
     /**
@@ -252,20 +253,13 @@ public class MainFrame extends javax.swing.JFrame {
             writer.print(csText.getText());
             writer.close();
             Reader reader = new BufferedReader(new FileReader("archivo.txt"));
-            IdLexer lexer = new IdLexer(reader);
-            while (true) {                
-                Token token = lexer.yylex();
-                if (token.tipo() == TokenConstants.EOF) {
-                    result.append("FIN");
-                    System.out.println(result);
-                    symTableText.setText("");
-                    symTableText.setText(result.toString());
-                    return;
-                }
-                    result.append(token.toString()).append("\n");
-            }
-                    
+            MyLexer lexer = new MyLexer(reader);
+            MyParser parser = new MyParser(lexer);
+            System.out.println(parser.parse().value);
+
         } catch (IOException e) {
+        } catch (Exception ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
