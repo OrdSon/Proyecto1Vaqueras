@@ -258,6 +258,8 @@ public class MainFrame extends javax.swing.JFrame {
             MyLexer lexer = new MyLexer(reader);
             MyParser parser = new MyParser(lexer);
             System.out.println(parser.parse().value);
+            System.out.println("*********************");
+            System.out.println(parser.getSalida());
 
         } catch (IOException e) {
         } catch (Exception ex) {
@@ -267,6 +269,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         csText.setText("");
+
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**

@@ -16,5 +16,6 @@ public enum Tipo {
     DECIMAL,
     STRING,
     CHAR,
-    BOOL
+    BOOL,
+    OBJECT
 }

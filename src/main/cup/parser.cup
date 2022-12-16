@@ -1,9 +1,73 @@
 package gt.edu.usac.compiler;
 import java_cup.runtime.*;
-
+import java.util.*;
+import Data.*;
 class MyParser;
 parser code{:
- public void report_error(String message, Object info) {
+
+    int tabs = 0;
+    boolean lock = false;
+    StringBuilder salida = new StringBuilder();
+
+    private void addLine(){
+        salida.append("\n");
+    }
+    private void addText(String valor){
+        salida.append(valor);
+    }
+    private void addTabs(){
+        salida.append("\n");
+        for (int i = 0; i < tabs; i++) {
+            salida.append("\t");
+        }
+    }
+        public String getSalida(){
+        String exit = salida.toString();
+        String[] lineas = salida.toString().split("\n");
+        StringBuilder nuevo = new StringBuilder();
+        for (int i = lineas.length-1; i >= 0; i--) {
+            if (!lineas[i].isEmpty()&&!lineas[i].isBlank()) {
+                nuevo.append(lineas[i]).append("\n");
+            }
+        }
+        ArrayList<Integer> cantTabs = contarTabs(nuevo.toString().split("\n"));
+        int maxTabs = maxTabNum(cantTabs);
+        
+        Extras.Formatter formatter= new Extras.Formatter();
+        //formatter.formatt(nuevo.toString().split("\n"), 0);
+        return nuevo.toString();
+    }
+        
+  
+       public ArrayList<Integer> contarTabs(String[] lineas){
+        ArrayList<Integer> cantTabs = new ArrayList<>();
+        for (int i = 0; i < lineas.length; i++) {
+            char[] caracteres = lineas[i].toCharArray();
+            int contador = 0;
+            for (int j = 0; j < caracteres.length; j++) {
+                if (caracteres[j] == '\t') {
+                    contador++;
+                }
+            }
+            cantTabs.add(contador);
+            contador = 0;
+        }
+        maxTabNum(cantTabs);
+        System.out.println(cantTabs.toString());
+        return cantTabs;
+    }
+
+    public int maxTabNum(ArrayList<Integer> cantTabs) {
+        int salida = 0;
+        for (int i = 0; i < cantTabs.size(); i++) {
+            if (cantTabs.get(i) > salida) {
+                salida = cantTabs.get(i);
+            }
+        }
+        System.out.println("NUMERO MAXIMO TABS: "+salida);
+        return salida;
+    }
+     public void report_error(String message, Object info) {
         System.out.println("public void report_error");
     }
     
@@ -29,7 +93,10 @@ terminal Double NUMBER,FOR;
 terminal INT,LONG,FLOAT,DOUBLE,DECIMAL,STRING;
 terminal CHAR,BOOL,ERROR, LT, GT, LET, LGT;
 terminal String identifier;
-terminal doubleValue, stringValue, intValue, charValue;
+terminal double doubleValue;
+terminal String stringValue;
+terminal int intValue;
+terminal String charValue;
 terminal WHILE;
 terminal TRUE;
 terminal FALSE;
@@ -55,40 +122,38 @@ terminal WRITE;
 /**Simbolos no terminales**/
 non terminal Double expr;
 non terminal String inicio;
-non terminal String funcion;
 non terminal String tipo;
 non terminal String ids;
 non terminal String params;
 non terminal String param;
-non terminal declaracion;
-non terminal llamada;
-non terminal atributos;
-non terminal sentencia;
-non terminal valor;
-non terminal asignacion;
+non terminal String declaracion;
+non terminal String llamada;
+non terminal String atributos;
+non terminal String sentencia;
+non terminal String valor;
+non terminal String asignacion;
 non terminal String tipoFun;
-non terminal for;
-non terminal forVariation;
-non terminal declaracionFor;
-non terminal while;
-non terminal condicion;
-non terminal valorCondicion;
-non terminal signoCondicion;
-non terminal sentencias;
-non terminal do;
-non terminal if;
-non terminal else;
-non terminal condicionIf;
-non terminal condicionCompleta;
-non terminal signoLogico;
-non terminal sentenciaCiclo;
-non terminal sentenciasCiclo;
-non terminal sentenciaSwitch;
-non terminal sentenciasSwitch;
-non terminal multiCase;
-non terminal switch;
-non terminal identifiers;
-non terminal console;
+non terminal String for;
+non terminal String forVariation;
+non terminal String declaracionFor;
+non terminal String while;
+non terminal String condicion;
+non terminal String valorCondicion;
+non terminal String signoCondicion;
+non terminal String sentencias;
+non terminal String do;
+non terminal String if;
+non terminal String condicionIf;
+non terminal String condicionCompleta;
+non terminal String signoLogico;
+non terminal String sentenciaCiclo;
+non terminal String sentenciasCiclo;
+non terminal String multiCase;
+non terminal String switch;
+non terminal String identifiers;
+non terminal  console;
+non terminal  llaveApertura;
+non terminal  llaveCierre;
 
 
 
@@ -101,8 +166,8 @@ precedence left UMINUS;
 
 start with inicio;
 
-inicio::= ids:i {:RESULT = i;:}
-|sentencias
+inicio::= ids:i {:RESULT = getSalida();:}
+|sentencias {:RESULT = getSalida();:}
 |expr:e {:RESULT = e+"";:}
 ;
 
@@ -132,63 +197,67 @@ sentencia::=if
 console::= CONSOLE DOT WRITE LPAREN valorCondicion RPAREN SEMI
 ;
 
-sentenciaCiclo::= sentencia
-|BREAK
-|CONTINUE
+sentenciaCiclo::= sentencia:s {:RESULT = s;:}
+|BREAK SEMI{:RESULT = "break;";addLine();:}
+|CONTINUE SEMI{:RESULT = "continue;";addLine();:}
 ;
 
 
-if::= IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE
-|IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE ELSE if
-|IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE ELSE LBRACE sentencias RBRACE
-|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE
-|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE ELSE if
-|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE ELSE LBRACE sentencias RBRACE
-|IF LPAREN condicionCompleta RPAREN LBRACE sentencias RBRACE ELSE LBRACE RBRACE
-|IF LPAREN condicionCompleta RPAREN LBRACE RBRACE ELSE LBRACE RBRACE
+if::=IF LPAREN condicionCompleta RPAREN llaveApertura sentencias llaveCierre 
+|IF LPAREN condicionCompleta RPAREN llaveApertura sentencias llaveCierre ELSE if
+|IF LPAREN condicionCompleta RPAREN llaveApertura sentencias llaveCierre ELSE llaveApertura sentencias llaveCierre
+|IF LPAREN condicionCompleta RPAREN llaveApertura llaveCierre
+|IF LPAREN condicionCompleta RPAREN llaveApertura llaveCierre ELSE if
+|IF LPAREN condicionCompleta RPAREN llaveApertura llaveCierre ELSE llaveApertura sentencias llaveCierre
+|IF LPAREN condicionCompleta RPAREN llaveApertura sentencias llaveCierre ELSE llaveApertura llaveCierre
+|IF LPAREN condicionCompleta RPAREN llaveApertura llaveCierre ELSE llaveApertura llaveCierre
 ;
 
-condicionCompleta ::= condicionIf
-|condicionCompleta signoLogico condicionIf
-;
 
-condicionIf::=condicion
-|identifier
-|NOT identifier
-;
-
-do::= DO LBRACE sentencias RBRACE  WHILE LPAREN condicionCompleta RPAREN SEMI
-|DO LBRACE RBRACE  WHILE LPAREN condicionCompleta RPAREN SEMI
+do::= DO llaveApertura sentencias llaveCierre  WHILE LPAREN condicionCompleta RPAREN SEMI
+|DO llaveApertura llaveCierre  WHILE LPAREN condicionCompleta RPAREN SEMI
 ;
 //********WHILE**********
-while::= WHILE LPAREN condicionCompleta RPAREN LBRACE sentenciasCiclo RBRACE
-|WHILE LPAREN condicionCompleta RPAREN LBRACE  RBRACE
+while::= WHILE LPAREN condicionCompleta:c RPAREN llaveApertura sentenciasCiclo llaveCierre 
+{:addText("while "+c+" :");:}
+|WHILE LPAREN condicionCompleta:c RPAREN llaveApertura  llaveCierre
+{:addText("while "+c+" :");:}
 ;
 
-condicion::= valorCondicion signoCondicion valorCondicion
-|TRUE
-|FALSE
+condicionCompleta ::= condicionIf:c {:RESULT = c;:}
+|condicionCompleta:c1 signoLogico:s condicionIf:c2 {:RESULT = c1+" "+s+" "+c2;:}
 ;
 
-valorCondicion::= identifier
-|valor
-|llamada
+condicionIf::=condicion:c {:RESULT = c;:}
+|identifier:i {:RESULT = i;:}
+|NOT identifier:i {:RESULT = "!"+i;:}
 ;
 
-signoLogico::=AND AND
-|OR OR
+
+condicion::= valorCondicion:v1 signoCondicion:s valorCondicion:v2 {:RESULT = v1+" "+s+" "+v2;:}
+|TRUE  {:RESULT = "true";:} 
+|FALSE {:RESULT = "false";:}
 ;
 
-signoCondicion::=LT
-|GT
-|LET
-|LGT
-|ASIGN ASIGN
-|NOT ASIGN
+valorCondicion::= identifier:i {:RESULT = i;:}
+|valor:v  {:RESULT = v;:}
+|llamada:l {:RESULT = l;:}
+;
+
+signoLogico::=AND AND{:RESULT = "&&";:}
+|OR OR{:RESULT = "||";:}
+;
+
+signoCondicion::=LT {:RESULT = "<";:}
+|GT {:RESULT = ">";:}
+|LET {:RESULT = "<=";:}
+|LGT {:RESULT = ">=";:}
+|ASIGN ASIGN {:RESULT = "==";:}
+|NOT ASIGN {:RESULT = "!=";:}
 ;
 //********FOR**********
-for::=FOR LPAREN declaracionFor RPAREN LBRACE sentenciasCiclo RBRACE
-|FOR LPAREN declaracionFor RPAREN LBRACE  RBRACE
+for::=FOR LPAREN declaracionFor RPAREN llaveApertura sentenciasCiclo llaveCierre
+|FOR LPAREN declaracionFor RPAREN llaveApertura  llaveCierre
 ;
 
 declaracionFor::= tipo identifier ASIGN valor SEMI identifier LT valor SEMI identifier forVariation
@@ -200,7 +269,7 @@ forVariation::= PLUS PLUS
 ;
 //********SWITCH**************
 
-switch::= SWITCH LPAREN identifier RPAREN LBRACE multiCase DEFAULT COLON sentencias BREAK SEMI RBRACE
+switch::= SWITCH LPAREN identifier RPAREN llaveApertura multiCase DEFAULT COLON sentencias BREAK SEMI llaveCierre
 ;
 
 multiCase::= CASE valorCondicion COLON sentencias BREAK SEMI multiCase
@@ -211,8 +280,8 @@ multiCase::= CASE valorCondicion COLON sentencias BREAK SEMI multiCase
 
 
 //********ASIGNACION**********
-asignacion::=identifier ASIGN valor SEMI
-|identifier ASIGN llamada SEMI
+asignacion::=identifier ASIGN valorCondicion SEMI
+
 ;
 
 //********DECLARACION**********
@@ -225,13 +294,13 @@ identifiers::= identifier
 ;
 
 //********LLAMADA**********
-llamada::=identifier LPAREN RPAREN 
-|identifier LPAREN atributos RPAREN
+llamada::=identifier:i LPAREN RPAREN {:RESULT = i+"()";:}
+|identifier:i LPAREN atributos:a RPAREN {:RESULT = i+"("+a+")";:}
 ;
 
 //********ATRIBUTOS**********
-atributos::=identifier
-|atributos identifier
+atributos::=identifier:i {:RESULT = i;:}
+|atributos:a identifier:i {:RESULT = a+" "+i;:}
 ;
 
 
@@ -243,18 +312,20 @@ param::= tipo identifier
 ;
 
 //********FUNCION**********
-ids::= tipo:i identifier:t LPAREN RPAREN LBRACE  sentencias RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
-|tipo:i identifier:t LPAREN params RPAREN LBRACE sentencias RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
-|VOID identifier:t LPAREN  RPAREN LBRACE sentencias RBRACE{:System.out.println(t);RESULT=t;:}
-|VOID identifier:t LPAREN params RPAREN LBRACE  sentencias RBRACE{:System.out.println(t);RESULT=t;:}
-|tipo:i identifier:t LPAREN RPAREN LBRACE   RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
-|tipo:i identifier:t LPAREN params RPAREN LBRACE  RBRACE{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
-|VOID identifier:t LPAREN  RPAREN LBRACE  RBRACE{:System.out.println(t);RESULT=t;:}
-|VOID identifier:t LPAREN params RPAREN LBRACE   RBRACE{:System.out.println(t);RESULT=t;:}
-|VOID MAIN LPAREN RPAREN LBRACE  sentencias RBRACE
-|VOID MAIN LPAREN RPAREN LBRACE RBRACE
+ids::= tipo:i identifier:t LPAREN RPAREN llaveApertura  sentencias llaveCierre{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|tipo:i identifier:t LPAREN params RPAREN llaveApertura sentencias llaveCierre{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|VOID identifier:t LPAREN  RPAREN llaveApertura sentencias llaveCierre{:System.out.println(t);RESULT=t;:}
+|VOID identifier:t LPAREN params RPAREN llaveApertura  sentencias llaveCierre{:System.out.println(t);RESULT=t;:}
+|tipo:i identifier:t LPAREN RPAREN llaveApertura   llaveCierre{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|tipo:i identifier:t LPAREN params RPAREN llaveApertura  llaveCierre{:System.out.println(i+"  "+t);RESULT=i+"  "+t;:}
+|VOID identifier:t LPAREN  RPAREN llaveApertura  llaveCierre{:System.out.println(t);RESULT=t;:}
+|VOID identifier:t LPAREN params RPAREN llaveApertura   llaveCierre{:System.out.println(t);RESULT=t;:}
+|VOID MAIN LPAREN RPAREN llaveApertura  sentencias llaveCierre
+|VOID MAIN LPAREN RPAREN llaveApertura llaveCierre
 ;
 
+llaveApertura::=LBRACE{:tabs++; addTabs();:};
+llaveCierre::=RBRACE{:tabs--; addTabs();:};
 
 
 //********EXPRESION**********
@@ -268,11 +339,11 @@ expr::= expr:e1 PLUS expr:e2 {:RESULT = new Double(e1.doubleValue() + e2.doubleV
     | LPAREN expr:e RPAREN {:RESULT = e;:}
     | NUMBER:e {:RESULT = e;:}
 ;
-valor::= NUMBER
-    |doubleValue
-    |intValue
-    |charValue
-    |stringValue
+valor::= NUMBER:n {:RESULT = n+"";:}
+    |doubleValue:d {:RESULT = d+"";:}
+    |intValue:i {:RESULT = i+"";:}
+    |charValue:c {:RESULT = c;:}
+    |stringValue:s {:RESULT = s;:}
 ;
 
 tipo::=INT {:System.out.println("INT");RESULT = "INT";:}
@@ -285,7 +356,5 @@ tipo::=INT {:System.out.println("INT");RESULT = "INT";:}
     |BOOL   {:System.out.println("BOOL");RESULT ="BOOL";:}
     |identifier:i {:System.out.println(i); RESULT = i;:}
 ;
-tipoFun::= tipo
-    |VOID   {:System.out.println("VOID");RESULT ="VOID";:}
-;
+
 

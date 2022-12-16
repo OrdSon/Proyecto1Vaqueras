@@ -4,8 +4,6 @@
  */
 package gt.edu.usac.compiler;
 
-import Data.ParamList;
-import Data.Parametro;
 import Data.Tipo;
 import java.util.LinkedList;
 
@@ -16,12 +14,11 @@ import java.util.LinkedList;
 public class Main {
 
     public static void main(String[] args) {
-        if (true) {
-            String texto = "asd";
-            int uno = 1;
-            
-        }
+        StringBuilder salida = new StringBuilder();
+        salida.append("cosas raras");
+        salida.append("\t");
+        salida.append("esta pasando");
+        System.out.println(salida.toString());
     }
 }
-
 

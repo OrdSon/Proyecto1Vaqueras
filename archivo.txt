@@ -1,17 +1,20 @@
-switch(var1){
-case 1:
-int perro,loco,hermano,hdmi = 5;
-case 2:
-int mania = 4;
-Console.Write("asdasd");
-break;
-case 3:
-int perro = 4;
-	if(true){
-	variable = 4;
+while(A<B){
+	while(C<D){
+		while(CE<CF){
+
+		}
 	}
-break;
-default:
-int loco = 4;
-break;
+	while(G<H){
+
+	}
+}
+
+while(I<J){
+
+}
+
+while(K<L){
+	while(M<N){
+
+	}
 }
