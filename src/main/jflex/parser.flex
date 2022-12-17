@@ -35,8 +35,8 @@ FOR = "for"
     private Symbol symbol(int type){
         return new Symbol(type, yyline, yycolumn);    
     }
-    private Symbol symbol(int type, Object value){
-        return new Symbol (type,value);    
+    private Symbol symbol(int type,int line, int column, Object value){
+        return new Symbol (type,line, column,value);    
     }
 %}
 
@@ -78,59 +78,59 @@ FOR = "for"
 {cualquierCaracter}* {finDeLinea}?  {/*Absolutamente nada*/}
 }
 
-{digit}+"."{digit}+  {return symbol(MyParserSym.doubleValue, Double.valueOf(yytext()));}
-{digit}+  {return symbol(MyParserSym.intValue, Double.valueOf(yytext()));}
-"."   {return  symbol(MyParserSym.DOT,yytext());}
-"{"   {return  symbol(MyParserSym.LBRACE,yytext());}
-"}"   {return symbol(MyParserSym.RBRACE,yytext());}
-","   {return symbol(MyParserSym.COMMA,yytext());}
-"("         {return symbol(MyParserSym.LPAREN,yytext());}
-")"         {return symbol(MyParserSym.RPAREN,yytext());}
-"+"         {return symbol(MyParserSym.PLUS,yytext());}
-"*"         {return symbol(MyParserSym.TIMES,yytext());}
-"%"         {return symbol(MyParserSym.MOD,yytext());}
-"/"         {return symbol(MyParserSym.DIV,yytext());}
-":"     {return symbol(MyParserSym.COLON,yytext());}
-"-"         {return symbol(MyParserSym.MINUS,yytext());}
-";"   {return symbol(MyParserSym.SEMI,yytext());}
-"<" {return symbol(MyParserSym.LT,yytext());}
-">" {return symbol(MyParserSym.GT,yytext());}
-"<=" {return symbol(MyParserSym.LET,yytext());}
-">=" {return symbol(MyParserSym.LGT,yytext());}
-"&" {return symbol(MyParserSym.AND,yytext());}
-"|" {return symbol(MyParserSym.OR,yytext());}
-"!" {return symbol(MyParserSym.NOT,yytext());}
-"int"         {return symbol(MyParserSym.INT,yytext());}
-"while"     {return symbol(MyParserSym.WHILE,yytext());}
-"true"      {return symbol(MyParserSym.TRUE,yytext());}
-"false"     {return symbol(MyParserSym.FALSE,yytext());}
-"do"     {return symbol(MyParserSym.DO,yytext());}
-"if"     {return symbol(MyParserSym.IF,yytext());}
-"else"     {return symbol(MyParserSym.ELSE,yytext());}
-"continue"     {return symbol(MyParserSym.CONTINUE,yytext());}
-"break"     {return symbol(MyParserSym.BREAK,yytext());}
-"return"     {return symbol(MyParserSym.RETURN,yytext());}
-"main"  {return symbol(MyParserSym.MAIN,yytext());}
-"switch" {return symbol(MyParserSym.SWITCH,yytext());}
-"default" {return symbol(MyParserSym.DEFAULT,yytext());}
-"case" {return symbol(MyParserSym.CASE,yytext());}
-"Console" {return symbol(MyParserSym.CONSOLE,yytext());}
-"Write" {return symbol(MyParserSym.WRITE,yytext());}
+{digit}+"."{digit}+  {return symbol(MyParserSym.doubleValue, yyline,yycolumn,Double.valueOf(yytext()));}
+{digit}+  {return symbol(MyParserSym.intValue,yyline,yycolumn, Double.valueOf(yytext()));}
+"."   {return  symbol(MyParserSym.DOT,yyline,yycolumn,yytext());}
+"{"   {return  symbol(MyParserSym.LBRACE,yyline,yycolumn,yytext());}
+"}"   {return symbol(MyParserSym.RBRACE,yyline,yycolumn,yytext());}
+","   {return symbol(MyParserSym.COMMA,yyline,yycolumn,yytext());}
+"("         {return symbol(MyParserSym.LPAREN,yyline,yycolumn,yytext());}
+")"         {return symbol(MyParserSym.RPAREN,yyline,yycolumn,yytext());}
+"+"         {return symbol(MyParserSym.PLUS,yyline,yycolumn,yytext());}
+"*"         {return symbol(MyParserSym.TIMES,yyline,yycolumn,yytext());}
+"%"         {return symbol(MyParserSym.MOD,yyline,yycolumn,yytext());}
+"/"         {return symbol(MyParserSym.DIV,yyline,yycolumn,yytext());}
+":"     {return symbol(MyParserSym.COLON,yyline,yycolumn,yytext());}
+"-"         {return symbol(MyParserSym.MINUS,yyline,yycolumn,yytext());}
+";"   {return symbol(MyParserSym.SEMI,yyline,yycolumn,yytext());}
+"<" {return symbol(MyParserSym.LT,yyline,yycolumn,yytext());}
+">" {return symbol(MyParserSym.GT,yyline,yycolumn,yytext());}
+"<=" {return symbol(MyParserSym.LET,yyline,yycolumn,yytext());}
+">=" {return symbol(MyParserSym.LGT,yyline,yycolumn,yytext());}
+"&" {return symbol(MyParserSym.AND,yyline,yycolumn,yytext());}
+"|" {return symbol(MyParserSym.OR,yyline,yycolumn,yytext());}
+"!" {return symbol(MyParserSym.NOT,yyline,yycolumn,yytext());}
+"int"         {return symbol(MyParserSym.INT,yyline,yycolumn,yytext());}
+"while"     {return symbol(MyParserSym.WHILE,yyline,yycolumn,yytext());}
+"true"      {return symbol(MyParserSym.TRUE,yyline,yycolumn,yytext());}
+"false"     {return symbol(MyParserSym.FALSE,yyline,yycolumn,yytext());}
+"do"     {return symbol(MyParserSym.DO,yyline,yycolumn,yytext());}
+"if"     {return symbol(MyParserSym.IF,yyline,yycolumn,yytext());}
+"else"     {return symbol(MyParserSym.ELSE,yyline,yycolumn,yytext());}
+"continue"     {return symbol(MyParserSym.CONTINUE,yyline,yycolumn,yytext());}
+"break"     {return symbol(MyParserSym.BREAK,yyline,yycolumn,yytext());}
+"return"     {return symbol(MyParserSym.RETURN,yyline,yycolumn,yytext());}
+"main"  {return symbol(MyParserSym.MAIN,yyline,yycolumn,yytext());}
+"switch" {return symbol(MyParserSym.SWITCH,yyline,yycolumn,yytext());}
+"default" {return symbol(MyParserSym.DEFAULT,yyline,yycolumn,yytext());}
+"case" {return symbol(MyParserSym.CASE,yyline,yycolumn,yytext());}
+"Console" {return symbol(MyParserSym.CONSOLE,yyline,yycolumn,yytext());}
+"Write" {return symbol(MyParserSym.WRITE,yyline,yycolumn,yytext());}
 
-{FOR} {return symbol(MyParserSym.FOR,yytext());}
-{ASIGN} {return symbol(MyParserSym.ASIGN,yytext());}
-{INTEGER} {return  symbol(MyParserSym.INT,yytext());}
-{LONG} {return symbol (MyParserSym.LONG,yytext());}
-{FLOAT} {return symbol (MyParserSym.FLOAT,yytext());}
-{DOUBLE} {return symbol (MyParserSym.DOUBLE,yytext());}
-{DECIMAL} {return symbol (MyParserSym.DECIMAL,yytext());}
-{STRING} {return symbol (MyParserSym.STRING,yytext());}
-{CHAR} {return symbol (MyParserSym.CHAR,yytext());}
-{BOOL} {return symbol (MyParserSym.BOOL,yytext());}
-{VOID} {return  symbol(MyParserSym.VOID,yytext());}
+{FOR} {return symbol(MyParserSym.FOR,yyline,yycolumn,yytext());}
+{ASIGN} {return symbol(MyParserSym.ASIGN,yyline,yycolumn,yytext());}
+{INTEGER} {return  symbol(MyParserSym.INT,yyline,yycolumn,yytext());}
+{LONG} {return symbol (MyParserSym.LONG,yyline,yycolumn,yytext());}
+{FLOAT} {return symbol (MyParserSym.FLOAT,yyline,yycolumn,yytext());}
+{DOUBLE} {return symbol (MyParserSym.DOUBLE,yyline,yycolumn,yytext());}
+{DECIMAL} {return symbol (MyParserSym.DECIMAL,yyline,yycolumn,yytext());}
+{STRING} {return symbol (MyParserSym.STRING,yyline,yycolumn,yytext());}
+{CHAR} {return symbol (MyParserSym.CHAR,yyline,yycolumn,yytext());}
+{BOOL} {return symbol (MyParserSym.BOOL,yyline,yycolumn,yytext());}
+{VOID} {return  symbol(MyParserSym.VOID,yyline,yycolumn,yytext());}
 
-"\'"{letter}"\'" {return symbol(MyParserSym.charValue,yytext());}
-{identifier} {return symbol (MyParserSym.identifier,yytext());}
+"\'"{letter}"\'" {return symbol(MyParserSym.charValue,yyline,yycolumn,yytext());}
+{identifier} {return symbol (MyParserSym.identifier,yyline,yycolumn,yytext());}
 
 {whitespace}+ {/*nadita*/}
 [^]         {throw new Error("cadena ilegal::= "+yytext());}

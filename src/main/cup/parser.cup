@@ -9,6 +9,9 @@ parser code{:
     boolean lock = false;
     StringBuilder salida = new StringBuilder();
 
+    LinkedList<Expresion> expresiones = new LinkedList<>();
+    LinkedList<Expresion> secundaria = new LinkedList();
+    
     private void addLine(){
         salida.append("\n");
     }
@@ -34,7 +37,7 @@ parser code{:
         int maxTabs = maxTabNum(cantTabs);
         
         Extras.Formatter formatter= new Extras.Formatter();
-        //formatter.formatt(nuevo.toString().split("\n"), 0);
+        //formatter.Reformat(nuevo.toString().split("\n"), 0, maxTabs, 0, lineas.length, 0);
         return nuevo.toString();
     }
         
@@ -169,6 +172,7 @@ start with inicio;
 inicio::= ids:i {:RESULT = getSalida();:}
 |sentencias {:RESULT = getSalida();:}
 |expr:e {:RESULT = e+"";:}
+|error LBRACE
 ;
 
 sentenciasCiclo::=sentenciaCiclo
@@ -191,7 +195,8 @@ sentencia::=if
 |RETURN valor SEMI
 |RETURN identifier SEMI
 |RETURN SEMI
-|RETURN llamada
+|RETURN llamada//en proceso
+|error SEMI 
 ;
 
 console::= CONSOLE DOT WRITE LPAREN valorCondicion RPAREN SEMI
@@ -294,7 +299,7 @@ identifiers::= identifier
 ;
 
 //********LLAMADA**********
-llamada::=identifier:i LPAREN RPAREN {:RESULT = i+"()";:}
+llamada::=identifier:i LPAREN RPAREN {:RESULT = i;:}
 |identifier:i LPAREN atributos:a RPAREN {:RESULT = i+"("+a+")";:}
 ;
 
@@ -322,6 +327,7 @@ ids::= tipo:i identifier:t LPAREN RPAREN llaveApertura  sentencias llaveCierre{:
 |VOID identifier:t LPAREN params RPAREN llaveApertura   llaveCierre{:System.out.println(t);RESULT=t;:}
 |VOID MAIN LPAREN RPAREN llaveApertura  sentencias llaveCierre
 |VOID MAIN LPAREN RPAREN llaveApertura llaveCierre
+|error RBRACE
 ;
 
 llaveApertura::=LBRACE{:tabs++; addTabs();:};

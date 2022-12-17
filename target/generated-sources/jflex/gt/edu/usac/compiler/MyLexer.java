@@ -612,8 +612,8 @@ public class MyLexer implements java_cup.runtime.Scanner {
     private Symbol symbol(int type){
         return new Symbol(type, yyline, yycolumn);    
     }
-    private Symbol symbol(int type, Object value){
-        return new Symbol (type,value);    
+    private Symbol symbol(int type,int line, int column, Object value){
+        return new Symbol (type,line, column,value);    
     }
 
 
@@ -1026,7 +1026,7 @@ public class MyLexer implements java_cup.runtime.Scanner {
             // fall through
           case 70: break;
           case 4:
-            { return symbol(MyParserSym.NOT,yytext());
+            { return symbol(MyParserSym.NOT,yyline,yycolumn,yytext());
             }
             // fall through
           case 71: break;
@@ -1036,102 +1036,102 @@ public class MyLexer implements java_cup.runtime.Scanner {
             // fall through
           case 72: break;
           case 6:
-            { return symbol(MyParserSym.MOD,yytext());
+            { return symbol(MyParserSym.MOD,yyline,yycolumn,yytext());
             }
             // fall through
           case 73: break;
           case 7:
-            { return symbol(MyParserSym.AND,yytext());
+            { return symbol(MyParserSym.AND,yyline,yycolumn,yytext());
             }
             // fall through
           case 74: break;
           case 8:
-            { return symbol(MyParserSym.LPAREN,yytext());
+            { return symbol(MyParserSym.LPAREN,yyline,yycolumn,yytext());
             }
             // fall through
           case 75: break;
           case 9:
-            { return symbol(MyParserSym.RPAREN,yytext());
+            { return symbol(MyParserSym.RPAREN,yyline,yycolumn,yytext());
             }
             // fall through
           case 76: break;
           case 10:
-            { return symbol(MyParserSym.TIMES,yytext());
+            { return symbol(MyParserSym.TIMES,yyline,yycolumn,yytext());
             }
             // fall through
           case 77: break;
           case 11:
-            { return symbol(MyParserSym.PLUS,yytext());
+            { return symbol(MyParserSym.PLUS,yyline,yycolumn,yytext());
             }
             // fall through
           case 78: break;
           case 12:
-            { return symbol(MyParserSym.COMMA,yytext());
+            { return symbol(MyParserSym.COMMA,yyline,yycolumn,yytext());
             }
             // fall through
           case 79: break;
           case 13:
-            { return symbol(MyParserSym.MINUS,yytext());
+            { return symbol(MyParserSym.MINUS,yyline,yycolumn,yytext());
             }
             // fall through
           case 80: break;
           case 14:
-            { return  symbol(MyParserSym.DOT,yytext());
+            { return  symbol(MyParserSym.DOT,yyline,yycolumn,yytext());
             }
             // fall through
           case 81: break;
           case 15:
-            { return symbol(MyParserSym.DIV,yytext());
+            { return symbol(MyParserSym.DIV,yyline,yycolumn,yytext());
             }
             // fall through
           case 82: break;
           case 16:
-            { return symbol(MyParserSym.intValue, Double.valueOf(yytext()));
+            { return symbol(MyParserSym.intValue,yyline,yycolumn, Double.valueOf(yytext()));
             }
             // fall through
           case 83: break;
           case 17:
-            { return symbol(MyParserSym.COLON,yytext());
+            { return symbol(MyParserSym.COLON,yyline,yycolumn,yytext());
             }
             // fall through
           case 84: break;
           case 18:
-            { return symbol(MyParserSym.SEMI,yytext());
+            { return symbol(MyParserSym.SEMI,yyline,yycolumn,yytext());
             }
             // fall through
           case 85: break;
           case 19:
-            { return symbol(MyParserSym.LT,yytext());
+            { return symbol(MyParserSym.LT,yyline,yycolumn,yytext());
             }
             // fall through
           case 86: break;
           case 20:
-            { return symbol(MyParserSym.ASIGN,yytext());
+            { return symbol(MyParserSym.ASIGN,yyline,yycolumn,yytext());
             }
             // fall through
           case 87: break;
           case 21:
-            { return symbol(MyParserSym.GT,yytext());
+            { return symbol(MyParserSym.GT,yyline,yycolumn,yytext());
             }
             // fall through
           case 88: break;
           case 22:
-            { return symbol (MyParserSym.identifier,yytext());
+            { return symbol (MyParserSym.identifier,yyline,yycolumn,yytext());
             }
             // fall through
           case 89: break;
           case 23:
-            { return  symbol(MyParserSym.LBRACE,yytext());
+            { return  symbol(MyParserSym.LBRACE,yyline,yycolumn,yytext());
             }
             // fall through
           case 90: break;
           case 24:
-            { return symbol(MyParserSym.OR,yytext());
+            { return symbol(MyParserSym.OR,yyline,yycolumn,yytext());
             }
             // fall through
           case 91: break;
           case 25:
-            { return symbol(MyParserSym.RBRACE,yytext());
+            { return symbol(MyParserSym.RBRACE,yyline,yycolumn,yytext());
             }
             // fall through
           case 92: break;
@@ -1168,22 +1168,22 @@ public class MyLexer implements java_cup.runtime.Scanner {
             // fall through
           case 98: break;
           case 32:
-            { return symbol(MyParserSym.LET,yytext());
+            { return symbol(MyParserSym.LET,yyline,yycolumn,yytext());
             }
             // fall through
           case 99: break;
           case 33:
-            { return symbol(MyParserSym.LGT,yytext());
+            { return symbol(MyParserSym.LGT,yyline,yycolumn,yytext());
             }
             // fall through
           case 100: break;
           case 34:
-            { return symbol(MyParserSym.DO,yytext());
+            { return symbol(MyParserSym.DO,yyline,yycolumn,yytext());
             }
             // fall through
           case 101: break;
           case 35:
-            { return symbol(MyParserSym.IF,yytext());
+            { return symbol(MyParserSym.IF,yyline,yycolumn,yytext());
             }
             // fall through
           case 102: break;
@@ -1219,22 +1219,22 @@ public class MyLexer implements java_cup.runtime.Scanner {
             // fall through
           case 108: break;
           case 42:
-            { return symbol(MyParserSym.charValue,yytext());
+            { return symbol(MyParserSym.charValue,yyline,yycolumn,yytext());
             }
             // fall through
           case 109: break;
           case 43:
-            { return symbol(MyParserSym.doubleValue, Double.valueOf(yytext()));
+            { return symbol(MyParserSym.doubleValue, yyline,yycolumn,Double.valueOf(yytext()));
             }
             // fall through
           case 110: break;
           case 44:
-            { return symbol(MyParserSym.FOR,yytext());
+            { return symbol(MyParserSym.FOR,yyline,yycolumn,yytext());
             }
             // fall through
           case 111: break;
           case 45:
-            { return symbol(MyParserSym.INT,yytext());
+            { return symbol(MyParserSym.INT,yyline,yycolumn,yytext());
             }
             // fall through
           case 112: break;
@@ -1244,107 +1244,107 @@ public class MyLexer implements java_cup.runtime.Scanner {
             // fall through
           case 113: break;
           case 47:
-            { return symbol (MyParserSym.BOOL,yytext());
+            { return symbol (MyParserSym.BOOL,yyline,yycolumn,yytext());
             }
             // fall through
           case 114: break;
           case 48:
-            { return symbol(MyParserSym.CASE,yytext());
+            { return symbol(MyParserSym.CASE,yyline,yycolumn,yytext());
             }
             // fall through
           case 115: break;
           case 49:
-            { return symbol (MyParserSym.CHAR,yytext());
+            { return symbol (MyParserSym.CHAR,yyline,yycolumn,yytext());
             }
             // fall through
           case 116: break;
           case 50:
-            { return symbol(MyParserSym.ELSE,yytext());
+            { return symbol(MyParserSym.ELSE,yyline,yycolumn,yytext());
             }
             // fall through
           case 117: break;
           case 51:
-            { return symbol (MyParserSym.LONG,yytext());
+            { return symbol (MyParserSym.LONG,yyline,yycolumn,yytext());
             }
             // fall through
           case 118: break;
           case 52:
-            { return symbol(MyParserSym.MAIN,yytext());
+            { return symbol(MyParserSym.MAIN,yyline,yycolumn,yytext());
             }
             // fall through
           case 119: break;
           case 53:
-            { return symbol(MyParserSym.TRUE,yytext());
+            { return symbol(MyParserSym.TRUE,yyline,yycolumn,yytext());
             }
             // fall through
           case 120: break;
           case 54:
-            { return  symbol(MyParserSym.VOID,yytext());
+            { return  symbol(MyParserSym.VOID,yyline,yycolumn,yytext());
             }
             // fall through
           case 121: break;
           case 55:
-            { return symbol(MyParserSym.WRITE,yytext());
+            { return symbol(MyParserSym.WRITE,yyline,yycolumn,yytext());
             }
             // fall through
           case 122: break;
           case 56:
-            { return symbol(MyParserSym.BREAK,yytext());
+            { return symbol(MyParserSym.BREAK,yyline,yycolumn,yytext());
             }
             // fall through
           case 123: break;
           case 57:
-            { return symbol(MyParserSym.FALSE,yytext());
+            { return symbol(MyParserSym.FALSE,yyline,yycolumn,yytext());
             }
             // fall through
           case 124: break;
           case 58:
-            { return symbol (MyParserSym.FLOAT,yytext());
+            { return symbol (MyParserSym.FLOAT,yyline,yycolumn,yytext());
             }
             // fall through
           case 125: break;
           case 59:
-            { return symbol(MyParserSym.WHILE,yytext());
+            { return symbol(MyParserSym.WHILE,yyline,yycolumn,yytext());
             }
             // fall through
           case 126: break;
           case 60:
-            { return symbol (MyParserSym.DOUBLE,yytext());
+            { return symbol (MyParserSym.DOUBLE,yyline,yycolumn,yytext());
             }
             // fall through
           case 127: break;
           case 61:
-            { return symbol(MyParserSym.RETURN,yytext());
+            { return symbol(MyParserSym.RETURN,yyline,yycolumn,yytext());
             }
             // fall through
           case 128: break;
           case 62:
-            { return symbol (MyParserSym.STRING,yytext());
+            { return symbol (MyParserSym.STRING,yyline,yycolumn,yytext());
             }
             // fall through
           case 129: break;
           case 63:
-            { return symbol(MyParserSym.SWITCH,yytext());
+            { return symbol(MyParserSym.SWITCH,yyline,yycolumn,yytext());
             }
             // fall through
           case 130: break;
           case 64:
-            { return symbol(MyParserSym.CONSOLE,yytext());
+            { return symbol(MyParserSym.CONSOLE,yyline,yycolumn,yytext());
             }
             // fall through
           case 131: break;
           case 65:
-            { return symbol (MyParserSym.DECIMAL,yytext());
+            { return symbol (MyParserSym.DECIMAL,yyline,yycolumn,yytext());
             }
             // fall through
           case 132: break;
           case 66:
-            { return symbol(MyParserSym.DEFAULT,yytext());
+            { return symbol(MyParserSym.DEFAULT,yyline,yycolumn,yytext());
             }
             // fall through
           case 133: break;
           case 67:
-            { return symbol(MyParserSym.CONTINUE,yytext());
+            { return symbol(MyParserSym.CONTINUE,yyline,yycolumn,yytext());
             }
             // fall through
           case 134: break;

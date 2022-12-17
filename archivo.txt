@@ -1,20 +1,2 @@
-while(A<B){
-	while(C<D){
-		while(CE<CF){
-
-		}
-	}
-	while(G<H){
-
-	}
-}
-
-while(I<J){
-
-}
-
-while(K<L){
-	while(M<N){
-
-	}
+void funcion(){
 }

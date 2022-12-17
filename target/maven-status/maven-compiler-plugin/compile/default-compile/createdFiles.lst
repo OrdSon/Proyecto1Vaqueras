@@ -4,6 +4,7 @@ Data\Tipo.class
 gt\edu\usac\compiler\TokenConstants.class
 gt\edu\usac\compiler\Token.class
 gt\edu\usac\compiler\Main.class
+Data\Expresion.class
 Extras\TextLineNumber$1.class
 gt\edu\usac\compiler\MainFrame$2.class
 gt\edu\usac\compiler\MyLexer.class
@@ -14,4 +15,5 @@ gt\edu\usac\compiler\MyParser.class
 gt\edu\usac\compiler\MainFrame$3.class
 Extras\Formatter.class
 Extras\TextLineNumber.class
+Data\Llamada.class
 gt\edu\usac\compiler\MainFrame$4.class
