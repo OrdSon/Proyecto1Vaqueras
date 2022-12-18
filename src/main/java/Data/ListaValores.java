@@ -4,15 +4,12 @@
  */
 package Data;
 
-import gt.edu.usac.compiler.TokenConstants;
 import java.util.LinkedList;
 
 /**
  *
  * @author OrdSon
  */
-public class Expresion {
-    int linea;
-    int columna;
-    TokenConstants tipo;    
+public class ListaValores extends LinkedList<Object>{
+    
 }

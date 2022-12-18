@@ -190,7 +190,7 @@ sentencia::=if
 |switch
 |asignacion
 |declaracion
-|console
+|console//en proceso #1
 |llamada SEMI
 |RETURN valor SEMI
 |RETURN identifier SEMI
@@ -199,7 +199,7 @@ sentencia::=if
 |error SEMI 
 ;
 
-console::= CONSOLE DOT WRITE LPAREN valorCondicion RPAREN SEMI
+console::= CONSOLE DOT WRITE LPAREN valorCondicion RPAREN SEMI //En proceso #1
 ;
 
 sentenciaCiclo::= sentencia:s {:RESULT = s;:}
@@ -244,9 +244,9 @@ condicion::= valorCondicion:v1 signoCondicion:s valorCondicion:v2 {:RESULT = v1+
 |FALSE {:RESULT = "false";:}
 ;
 
-valorCondicion::= identifier:i {:RESULT = i;:}
-|valor:v  {:RESULT = v;:}
-|llamada:l {:RESULT = l;:}
+valorCondicion::= identifier:i {:RESULT = i;:}//En proceso #2
+|valor:v  {:RESULT = v;:}//En proceso #2
+|llamada:l {:RESULT = l;:}//En proceso #3
 ;
 
 signoLogico::=AND AND{:RESULT = "&&";:}
@@ -299,13 +299,15 @@ identifiers::= identifier
 ;
 
 //********LLAMADA**********
-llamada::=identifier:i LPAREN RPAREN {:RESULT = i;:}
-|identifier:i LPAREN atributos:a RPAREN {:RESULT = i+"("+a+")";:}
+llamada::=identifier:i LPAREN RPAREN {:RESULT = i;:}//En proceso #3
+|identifier:i LPAREN atributos:a RPAREN {:RESULT = i+"("+a+")";:}//En proceso #3
 ;
 
 //********ATRIBUTOS**********
 atributos::=identifier:i {:RESULT = i;:}
-|atributos:a identifier:i {:RESULT = a+" "+i;:}
+|valor
+|atributos:a COMMA identifier:i {:RESULT = a+" "+i;:}
+|atributos COMMA valor
 ;
 
 
@@ -345,11 +347,11 @@ expr::= expr:e1 PLUS expr:e2 {:RESULT = new Double(e1.doubleValue() + e2.doubleV
     | LPAREN expr:e RPAREN {:RESULT = e;:}
     | NUMBER:e {:RESULT = e;:}
 ;
-valor::= NUMBER:n {:RESULT = n+"";:}
-    |doubleValue:d {:RESULT = d+"";:}
-    |intValue:i {:RESULT = i+"";:}
-    |charValue:c {:RESULT = c;:}
-    |stringValue:s {:RESULT = s;:}
+valor::= NUMBER:n {:RESULT = n+"";:}//listo en java
+    |doubleValue:d {:RESULT = d+"";:}//listo en java
+    |intValue:i {:RESULT = i+"";:}//listo en java
+    |charValue:c {:RESULT = c;:}//listo en java
+    |stringValue:s {:RESULT = s;:}//listo en java
 ;
 
 tipo::=INT {:System.out.println("INT");RESULT = "INT";:}

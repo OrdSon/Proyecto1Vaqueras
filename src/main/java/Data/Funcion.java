@@ -11,24 +11,17 @@ import java.util.LinkedList;
  *
  * @author OrdSon
  */
-public class Llamada extends Expresion{
-    String nombre = "";
-    LinkedList<Expresion> parametros = new LinkedList<>();
-    Valor valor;//PENDIENTE DE IMPLEMENTAR
+public class Funcion extends Expresion{
+        String nombre;
+        TokenConstants tipoFuncion;
+        LinkedList<Parametro> parametros;
+        LinkedList<Expresion> expresiones;
 
-    public Llamada() {
-    }
-    /**
-     * Construye llamada del tipo:
-     * Identificador(id1, val1, id2 ... idN, valN);
-     * @param nombre
-     * @param parametros
-     * @param linea
-     * @param columna 
-     */
-    public Llamada(String nombre, LinkedList<Expresion> parametros, int linea, int columna){
+    public Funcion(TokenConstants tipoFuncion, String nombre,  LinkedList<Parametro> parametros, LinkedList<Expresion> expresiones, int linea, int columna) {
         this.nombre = nombre;
+        this.tipoFuncion = tipoFuncion;
         this.parametros = parametros;
+        this.expresiones = expresiones;
         this.linea = linea;
         this.columna = columna;
     }
@@ -41,12 +34,28 @@ public class Llamada extends Expresion{
         this.nombre = nombre;
     }
 
-    public LinkedList<Expresion> getParametros() {
+    public TokenConstants getTipoFuncion() {
+        return tipoFuncion;
+    }
+
+    public void setTipoFuncion(TokenConstants tipoFuncion) {
+        this.tipoFuncion = tipoFuncion;
+    }
+
+    public LinkedList<Parametro> getParametros() {
         return parametros;
     }
 
-    public void setParametros(LinkedList<Expresion> parametros) {
+    public void setParametros(LinkedList<Parametro> parametros) {
         this.parametros = parametros;
+    }
+
+    public LinkedList<Expresion> getExpresiones() {
+        return expresiones;
+    }
+
+    public void setExpresiones(LinkedList<Expresion> expresiones) {
+        this.expresiones = expresiones;
     }
 
     public int getLinea() {
@@ -72,7 +81,6 @@ public class Llamada extends Expresion{
     public void setTipo(TokenConstants tipo) {
         this.tipo = tipo;
     }
-    
-    
+        
     
 }

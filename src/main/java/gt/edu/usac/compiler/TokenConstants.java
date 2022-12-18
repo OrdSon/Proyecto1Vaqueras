@@ -89,5 +89,9 @@ public enum TokenConstants {
     identifier,
     stringValue,
     ERROR,
+    LISTA_VARIABLES,
+    VARIABLE,
+    INCREMENT,
+    DECREMENT,
     EOF
 }

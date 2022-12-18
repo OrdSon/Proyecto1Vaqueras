@@ -5,30 +5,17 @@
 package Data;
 
 import gt.edu.usac.compiler.TokenConstants;
-import java.util.LinkedList;
 
 /**
  *
  * @author OrdSon
  */
-public class Llamada extends Expresion{
-    String nombre = "";
-    LinkedList<Expresion> parametros = new LinkedList<>();
-    Valor valor;//PENDIENTE DE IMPLEMENTAR
+public class Parametro extends Expresion{
+        String nombre;
 
-    public Llamada() {
-    }
-    /**
-     * Construye llamada del tipo:
-     * Identificador(id1, val1, id2 ... idN, valN);
-     * @param nombre
-     * @param parametros
-     * @param linea
-     * @param columna 
-     */
-    public Llamada(String nombre, LinkedList<Expresion> parametros, int linea, int columna){
+    public Parametro(String nombre, TokenConstants tipo, int linea, int columna) {
         this.nombre = nombre;
-        this.parametros = parametros;
+        this.tipo = tipo;
         this.linea = linea;
         this.columna = columna;
     }
@@ -39,14 +26,6 @@ public class Llamada extends Expresion{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public LinkedList<Expresion> getParametros() {
-        return parametros;
-    }
-
-    public void setParametros(LinkedList<Expresion> parametros) {
-        this.parametros = parametros;
     }
 
     public int getLinea() {
@@ -72,7 +51,5 @@ public class Llamada extends Expresion{
     public void setTipo(TokenConstants tipo) {
         this.tipo = tipo;
     }
-    
-    
-    
+        
 }
