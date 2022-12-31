@@ -1,2 +1,20 @@
-void funcion(){
+int mania(){
+switch(valor){
+case 1:
+precio = 55;
+if((precio > 30 || precio <100) && precio>=0){
+Console.Write("Datos aceptado"+" si si"+ " seguimos");
+}else if(precio<0){
+Console.Write("EL precio es 0 :'(");
+}
+break;
+case 2:
+precio = 25;
+case 3:
+precio = 40;
+break;
+default:
+Console.Write("No válido. Escoja 1, 2, o 3.");
+break;
+}
 }

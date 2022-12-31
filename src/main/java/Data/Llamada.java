@@ -13,7 +13,8 @@ import java.util.LinkedList;
  */
 public class Llamada extends Expresion{
     String nombre = "";
-    LinkedList<Expresion> parametros = new LinkedList<>();
+    String label = "Llamada";
+    ListaValores parametros = new ListaValores();
     Valor valor;//PENDIENTE DE IMPLEMENTAR
 
     public Llamada() {
@@ -26,7 +27,7 @@ public class Llamada extends Expresion{
      * @param linea
      * @param columna 
      */
-    public Llamada(String nombre, LinkedList<Expresion> parametros, int linea, int columna){
+    public Llamada(String nombre, ListaValores parametros, int linea, int columna){
         this.nombre = nombre;
         this.parametros = parametros;
         this.linea = linea;
@@ -41,11 +42,11 @@ public class Llamada extends Expresion{
         this.nombre = nombre;
     }
 
-    public LinkedList<Expresion> getParametros() {
+    public ListaValores getParametros() {
         return parametros;
     }
 
-    public void setParametros(LinkedList<Expresion> parametros) {
+    public void setParametros(ListaValores parametros) {
         this.parametros = parametros;
     }
 
@@ -65,11 +66,11 @@ public class Llamada extends Expresion{
         this.columna = columna;
     }
 
-    public TokenConstants getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(TokenConstants tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
     

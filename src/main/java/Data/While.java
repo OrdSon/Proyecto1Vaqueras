@@ -4,63 +4,76 @@
  */
 package Data;
 
-import gt.edu.usac.compiler.TokenConstants;
-import java.util.LinkedList;
-
 /**
  *
  * @author OrdSon
  */
-public class While extends Expresion{
-    private LinkedList<Expresion> expresiones;
-    private LinkedList<Condicion> condiciones;
+public class While extends Expresion {
 
-    public While(LinkedList<Expresion> expresiones, LinkedList<Condicion> condiciones, int linea, int columna) {
+    private ListaExpresiones expresiones;
+    private ListaCondiciones condiciones;
+    String label = "While";
+    
+    public While(ListaExpresiones expresiones, ListaCondiciones condiciones, int linea, int columna) {
         this.expresiones = expresiones;
         this.condiciones = condiciones;
         this.linea = linea;
         this.columna = columna;
     }
-
-    public LinkedList<Expresion> getExpresiones() {
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("while ");
+        if (condiciones != null) {
+            sb.append(condiciones.toString()).append(" :").append("\n");
+        }
+        if (expresiones != null) {
+            
+            sb.append(expresiones.toString()).append("\n");
+            
+        }
+        return sb.toString();
+    }
+    
+    public ListaExpresiones getExpresiones() {
         return expresiones;
     }
-
-    public void setExpresiones(LinkedList<Expresion> expresiones) {
+    
+    public void setExpresiones(ListaExpresiones expresiones) {
         this.expresiones = expresiones;
     }
-
-    public LinkedList<Condicion> getCondiciones() {
+    
+    public ListaCondiciones getCondiciones() {
         return condiciones;
     }
-
-    public void setCondiciones(LinkedList<Condicion> condiciones) {
+    
+    public void setCondiciones(ListaCondiciones condiciones) {
         this.condiciones = condiciones;
     }
-
+    
     public int getLinea() {
         return linea;
     }
-
+    
     public void setLinea(int linea) {
         this.linea = linea;
     }
-
+    
     public int getColumna() {
         return columna;
     }
-
+    
     public void setColumna(int columna) {
         this.columna = columna;
     }
-
-    public TokenConstants getTipo() {
+    
+    public String getTipo() {
         return tipo;
     }
-
-    public void setTipo(TokenConstants tipo) {
+    
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    
     
 }

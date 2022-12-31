@@ -4,27 +4,33 @@
  */
 package gt.edu.usac.compiler;
 
+import Data.Declaracion;
+import Data.Expresion;
+import Data.ListaValores;
+import Data.Raiz;
 import Extras.TextLineNumber;
-import com.sun.source.tree.BreakTree;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 
 /**
  *
  * @author OrdSon
  */
 public class MainFrame extends javax.swing.JFrame {
+
+    String cadenaErrores;
 
     /**
      * Creates new form MainFrame
@@ -77,6 +83,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
@@ -98,6 +105,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(300, 478));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        symTableText.setEditable(false);
         symTableTextScrollPane.setViewportView(symTableText);
 
         jPanel2.add(symTableTextScrollPane, java.awt.BorderLayout.CENTER);
@@ -111,6 +119,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Salida Python"));
         jPanel4.setLayout(new java.awt.BorderLayout());
 
+        PythonText.setEditable(false);
         pythonTextScrollPane.setViewportView(PythonText);
 
         jPanel4.add(pythonTextScrollPane, java.awt.BorderLayout.CENTER);
@@ -118,9 +127,10 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel3.add(jPanel4);
 
         jPanel5.setBackground(new java.awt.Color(204, 255, 204));
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Salida HTML"));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Salida Consola"));
         jPanel5.setLayout(new java.awt.BorderLayout());
 
+        htmlText.setEditable(false);
         htmlTextScrollPane.setViewportView(htmlText);
 
         jPanel5.add(htmlTextScrollPane, java.awt.BorderLayout.CENTER);
@@ -183,16 +193,34 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem6);
 
+        jMenuItem7.setText("Ver Errores");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem7);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Python");
 
         jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem5.setText("Guardar");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem5);
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("Editar");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jCheckBoxMenuItem1);
 
         jMenuBar1.add(jMenu2);
@@ -201,10 +229,20 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem3.setText("Guardar");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem3);
 
         jCheckBoxMenuItem2.setSelected(true);
         jCheckBoxMenuItem2.setText("Editar");
+        jCheckBoxMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jCheckBoxMenuItem2);
 
         jMenuBar1.add(jMenu4);
@@ -215,17 +253,18 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
+        SaveAs(csText, ".cs");
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        
+
         try {
+
             JFileChooser chooser = new JFileChooser();
             int returnVal = chooser.showOpenDialog(this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                
+
                 File file = chooser.getSelectedFile();
                 try ( BufferedReader in = new BufferedReader(new FileReader(file))) {
                     StringBuilder text = new StringBuilder();
@@ -247,6 +286,10 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        if (csText.getText().isBlank() || csText.getText().isEmpty()) {
+            return;
+        }
+
         File archivo = new File("archivo.txt");
         PrintWriter writer;
         StringBuilder result = new StringBuilder();
@@ -257,9 +300,38 @@ public class MainFrame extends javax.swing.JFrame {
             Reader reader = new BufferedReader(new FileReader("archivo.txt"));
             MyLexer lexer = new MyLexer(reader);
             MyParser parser = new MyParser(lexer);
-            System.out.println(parser.parse().value);
-            System.out.println("*********************");
-            System.out.println(parser.getSalida());
+            PythonText.setText(parser.parse().value.toString());
+
+            Raiz temporal = parser.getRaiz();
+            if (temporal != null) {
+                System.out.println(temporal.getGraph());
+            }else{
+                System.out.println("RAIZ NULA");
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+
+            for (Declaracion object : parser.getSimbolos()) {
+                sb.append(object.toSpecialString()).append("\n");
+            }
+            symTableText.setText(sb.toString());
+
+            sb.setLength(0);
+
+            for (ListaValores valores : parser.getConsoleLog()) {
+                sb.append(valores.toSpecialString()).append("\n");
+            }
+
+            htmlText.setText(sb.toString());
+
+            sb.setLength(0);
+
+            for (Data.Error err : parser.getErrores()) {
+                sb.append(err).append("\n");
+            }
+
+            cadenaErrores = sb.toString();
 
         } catch (IOException e) {
         } catch (Exception ex) {
@@ -271,6 +343,30 @@ public class MainFrame extends javax.swing.JFrame {
         csText.setText("");
 
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        PythonText.setEditable(jCheckBoxMenuItem1.getState());
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void jCheckBoxMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem2ActionPerformed
+        htmlText.setEditable(jCheckBoxMenuItem2.getState());
+    }//GEN-LAST:event_jCheckBoxMenuItem2ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        SaveAs(PythonText, ".py");
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        SaveAs(htmlText, ".html");
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        if (cadenaErrores != null) {
+            JOptionPane.showMessageDialog(this, cadenaErrores);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se han hallado errores");
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -315,6 +411,35 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
+    public void SaveAs(JTextPane n, String extension) {
+        JFileChooser SaveAs = new JFileChooser();
+        SaveAs.setApproveButtonText("Save");
+        int actionDialog = SaveAs.showSaveDialog(this);
+        if (actionDialog != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File fileName = new File(SaveAs.getSelectedFile() + extension);
+        BufferedWriter outFile = null;
+        try {
+            outFile = new BufferedWriter(new FileWriter(fileName));
+
+            n.write(outFile);   // *** here: ***
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (outFile != null) {
+                try {
+                    outFile.close();
+                } catch (IOException e) {
+                    // one of the few times that I think that it's OK
+                    // to leave this blank
+                }
+            }
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextPane PythonText;
     private javax.swing.JTextPane csText;
@@ -333,6 +458,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

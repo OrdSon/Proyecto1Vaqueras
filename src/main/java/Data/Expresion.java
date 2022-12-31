@@ -11,8 +11,57 @@ import java.util.LinkedList;
  *
  * @author OrdSon
  */
+//SE SUPONE QUE NO TIENE QUE HACER NADA XDDDD
 public class Expresion {
+
     int linea;
     int columna;
-    TokenConstants tipo;    
+    String tipo;
+    String salida;
+    protected String id;
+
+    static int cantTabs = 0;
+    static int idCounter = 0;
+
+    public static String getTabs() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < cantTabs; i++) {
+            sb.append("\t");
+        }
+        return sb.toString();
+    }
+
+    public int getCantTabs() {
+        return cantTabs;
+    }
+
+    public static void setCantTabs(int cantTabs) {
+        Expresion.cantTabs = cantTabs;
+    }
+
+    String getGraph() {
+        return "";
+    }
+
+    public void setId() {
+        this.id = "id" + Expresion.idCounter;
+        Expresion.idCounter++;
+    }
+
+    public void printId() {
+        System.out.println(id);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNewId() {
+        return "id" + (++idCounter);
+    }
+
 }

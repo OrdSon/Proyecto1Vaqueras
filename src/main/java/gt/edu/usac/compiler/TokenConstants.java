@@ -93,5 +93,9 @@ public enum TokenConstants {
     VARIABLE,
     INCREMENT,
     DECREMENT,
+    FUNCION,
+    MAIN,
+    DECLARACION,
+    CONDICIONAL,
     EOF
 }

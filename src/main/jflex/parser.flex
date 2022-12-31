@@ -48,12 +48,14 @@ FOR = "for"
 <YYINITIAL>{
 
 \"              {string.setLength(0);yybegin(STRING);}
-"/*"            {yybegin(COMMENT);}
-"//"            {yybegin(LINECOMMENT);}
+"\""            {string.setLength(0);yybegin(STRING);}
+"/*"            {string.setLength(0);yybegin(COMMENT);}
 }
 
 <STRING> {
       \"                             { yybegin(YYINITIAL);
+                                       return new Symbol(MyParserSym.stringValue,string.toString());}
+    "\""                            { yybegin(YYINITIAL);
                                        return new Symbol(MyParserSym.stringValue,string.toString());}
       [^\n\r\"\\]+                   { string.append(yytext()); }
       \\t                            { string.append('\t'); }
@@ -74,9 +76,7 @@ FOR = "for"
     "*"+ "*/"   {/*NADA DE NADA*/}
 }
 
-<LINECOMMENT>{
-{cualquierCaracter}* {finDeLinea}?  {/*Absolutamente nada*/}
-}
+
 
 {digit}+"."{digit}+  {return symbol(MyParserSym.doubleValue, yyline,yycolumn,Double.valueOf(yytext()));}
 {digit}+  {return symbol(MyParserSym.intValue,yyline,yycolumn, Double.valueOf(yytext()));}
@@ -92,6 +92,7 @@ FOR = "for"
 "/"         {return symbol(MyParserSym.DIV,yyline,yycolumn,yytext());}
 ":"     {return symbol(MyParserSym.COLON,yyline,yycolumn,yytext());}
 "-"         {return symbol(MyParserSym.MINUS,yyline,yycolumn,yytext());}
+"--"    {return symbol(MyParserSym.MINUS2,yyline,yycolumn,yytext());}
 ";"   {return symbol(MyParserSym.SEMI,yyline,yycolumn,yytext());}
 "<" {return symbol(MyParserSym.LT,yyline,yycolumn,yytext());}
 ">" {return symbol(MyParserSym.GT,yyline,yycolumn,yytext());}
@@ -129,8 +130,10 @@ FOR = "for"
 {BOOL} {return symbol (MyParserSym.BOOL,yyline,yycolumn,yytext());}
 {VOID} {return  symbol(MyParserSym.VOID,yyline,yycolumn,yytext());}
 
-"\'"{letter}"\'" {return symbol(MyParserSym.charValue,yyline,yycolumn,yytext());}
+(\/\/)(.)* {/*Absolutamente nada*/}
+"'"[^]"'" {return symbol(MyParserSym.charValue,yyline,yycolumn,yytext());}
 {identifier} {return symbol (MyParserSym.identifier,yyline,yycolumn,yytext());}
 
 {whitespace}+ {/*nadita*/}
-[^]         {throw new Error("cadena ilegal::= "+yytext());}
+
+[^]         {System.out.println("cadena ilegal::="+yytext());}

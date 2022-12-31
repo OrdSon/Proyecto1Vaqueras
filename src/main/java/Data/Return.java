@@ -11,8 +11,10 @@ import gt.edu.usac.compiler.TokenConstants;
  * @author OrdSon
  */
 public class Return extends Expresion{
+    //PENDIENTE DE IMPLEMENTAR LLAMADAS Y NUEVOS VALORES
     private Valor valor;
     private boolean conValor;
+    String label = "Return";
     
     public Return(Valor valor, int linea, int columna) {
         this.conValor = false;
@@ -24,6 +26,16 @@ public class Return extends Expresion{
         this.conValor = false;
         this.linea = linea;
         this.columna = columna;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("return");
+        if (valor!=null) {
+            sb.append(valor.toString());
+        }
+        return sb.toString();
     }
 
     public Valor getValor() {
@@ -58,11 +70,11 @@ public class Return extends Expresion{
         this.columna = columna;
     }
 
-    public TokenConstants getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(TokenConstants tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
     

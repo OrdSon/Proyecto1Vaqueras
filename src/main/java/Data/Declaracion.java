@@ -4,7 +4,6 @@
  */
 package Data;
 
-import gt.edu.usac.compiler.TokenConstants;
 import java.util.LinkedList;
 
 /**
@@ -13,28 +12,10 @@ import java.util.LinkedList;
  */
 public class Declaracion extends Expresion {
 
-    TokenConstants tipoValor;
     String nombre;
-    LinkedList<String> identificadores;
+    ListaString identificadores;
     Valor valor;
-
-    /**
-     *
-     * @param tipoValor
-     * @param nombre
-     * @param valor
-     *
-     * Crea declaraciones del tipo: Tipo nombre = Valor;
-     * @param linea
-     * @param columna
-     */
-    public Declaracion(TokenConstants tipoValor, String nombre, Valor valor, int linea, int columna) {
-        this.tipoValor = tipoValor;
-        this.nombre = nombre;
-        this.valor = valor;
-        this.linea = linea;
-        this.columna = columna;
-    }
+    String label = "Declaracion";
 
     /**
      * Crea declaraciones del tipo: Tipo id1, id2, id3 ...idN = Valor;
@@ -45,12 +26,18 @@ public class Declaracion extends Expresion {
      * @param linea
      * @param columna
      */
-    public Declaracion(TokenConstants tipoValor, LinkedList<String> identificadores, Valor valor, int linea, int columna) {
-        this.tipoValor = tipoValor;
+    public Declaracion(String tipoValor, ListaString identificadores, Valor valor, int linea, int columna) {
+        this.tipo = tipoValor;
         this.valor = valor;
         this.identificadores = identificadores;
         this.linea = linea;
         this.columna = columna;
+        if (valor != null) {
+            this.salida = "var  " + identificadores.toString() + " = " + valor.toString();
+        } else {
+            this.salida = "var  " + identificadores.toString();
+        }
+        this.id = "id" + (++Expresion.idCounter);
     }
 
     /**
@@ -62,11 +49,14 @@ public class Declaracion extends Expresion {
      * @param linea
      * @param columna
      */
-    public Declaracion(TokenConstants tipo, LinkedList<String> identificadores, int linea, int columna) {
+    public Declaracion(String tipo, ListaString identificadores, int linea, int columna) {
         this.tipo = tipo;
         this.identificadores = identificadores;
         this.linea = linea;
         this.columna = columna;
+        this.salida = "var  " + identificadores.toString();
+        this.id = "id" + (++Expresion.idCounter);
+
     }
 
     /**
@@ -77,19 +67,45 @@ public class Declaracion extends Expresion {
      * @param linea
      * @param columna
      */
-    public Declaracion(TokenConstants tipoValor, String nombre, int linea, int columna) {
-        this.tipoValor = tipoValor;
+    public Declaracion(String tipoValor, String nombre, int linea, int columna) {
+        this.tipo = tipoValor;
         this.nombre = nombre;
         this.linea = linea;
         this.columna = columna;
+        this.salida = "var  " + nombre;
+        this.id = "id" + (++Expresion.idCounter);
+
     }
 
-    public TokenConstants getTipoValor() {
-        return tipoValor;
+    @Override
+    public String toString() {
+        return salida;
     }
 
-    public void setTipoValor(TokenConstants tipoValor) {
-        this.tipoValor = tipoValor;
+    public String toSpecialString() {
+        StringBuilder sb = new StringBuilder();
+        if (tipo != null && !tipo.isEmpty()) {
+            sb.append(tipo).append(" ");
+        }
+        if (nombre != null && !nombre.isEmpty()) {
+            sb.append(nombre).append(" ");
+        } else if (identificadores != null) {
+            sb.append(identificadores.toString());
+        }
+        if (valor != null) {
+            sb.append(" = ").append(valor.toString());
+        }
+        sb.append(";  ").append("row: ").append(linea).append(" col:").append(columna);
+        return sb.toString();
+
+    }
+
+    public String getTipoValor() {
+        return tipo;
+    }
+
+    public void setTipoValor(String tipoValor) {
+        this.tipo = tipoValor;
     }
 
     public String getNombre() {
@@ -104,7 +120,7 @@ public class Declaracion extends Expresion {
         return identificadores;
     }
 
-    public void setIdentificadores(LinkedList<String> identificadores) {
+    public void setIdentificadores(ListaString identificadores) {
         this.identificadores = identificadores;
     }
 
@@ -132,12 +148,22 @@ public class Declaracion extends Expresion {
         this.columna = columna;
     }
 
-    public TokenConstants getTipo() {
-        return tipo;
+    public String getFirst() {
+        return identificadores.getFirst();
     }
 
-    public void setTipo(TokenConstants tipo) {
-        this.tipo = tipo;
+    @Override
+    public String getGraph() {
+        StringBuilder sb = new StringBuilder();
+        String idValor = "id" + (++Expresion.idCounter);
+        for (String identificador : identificadores) {
+            String idTemporal = "id" + (++Expresion.idCounter);
+            sb.append(id).append("->").append(idTemporal).append("\n");
+            sb.append(idTemporal).append("[label =\"").append(identificador).append("\"];").append("\n");
+        }
+        sb.append(id).append("->").append(idValor).append("\n");
+        sb.append(id).append("[label =\"").append(label).append("\"];").append("\n");
+        sb.append(idValor).append("[label =\"").append(valor.toString()).append("\"];").append("\n");
+        return sb.toString();
     }
-
 }

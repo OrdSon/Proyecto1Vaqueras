@@ -4,20 +4,40 @@
  */
 package Data;
 
-import gt.edu.usac.compiler.TokenConstants;
-
 /**
  *
  * @author OrdSon
  */
-public class Parametro extends Expresion{
-        String nombre;
+public class Parametro extends Expresion {
 
-    public Parametro(String nombre, TokenConstants tipo, int linea, int columna) {
+    String nombre;
+    String label = "Parametro";
+
+    public Parametro(String nombre, String tipo, int linea, int columna) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.linea = linea;
         this.columna = columna;
+        id = "id"+(++Expresion.idCounter);
+    }
+
+    @Override
+    public String toString() {
+        return "var " + nombre;
+    }
+
+    @Override
+    public String getGraph() {
+        StringBuilder sb = new StringBuilder();
+        String idTipo= "id"+(++Expresion.idCounter);        
+        String idNombre = "id"+(++Expresion.idCounter);
+        sb.append(id).append("\n");
+        sb.append(id).append("->").append(idTipo).append("\n");
+        sb.append(id).append("->").append(idNombre).append("\n");
+        sb.append(id).append("[label = \"").append(label).append("\"];").append("\n");
+        sb.append(idTipo).append("[label = \"").append(tipo).append("\"];").append("\n");
+        sb.append(idNombre).append("[label = \"").append(nombre).append("\"];").append("\n");
+        return sb.toString();
     }
 
     public String getNombre() {
@@ -44,12 +64,12 @@ public class Parametro extends Expresion{
         this.columna = columna;
     }
 
-    public TokenConstants getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(TokenConstants tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-        
+
 }

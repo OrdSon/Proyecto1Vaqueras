@@ -4,8 +4,6 @@
  */
 package Data;
 
-import gt.edu.usac.compiler.TokenConstants;
-
 /**
  *
  * @author OrdSon
@@ -14,13 +12,16 @@ public class Error {
     private String cadena;
     private int linea;
     private int columna;
-    String tipo;
+    String tipo ;
+    String salida;
+    String label = "Error";
     
     public Error(String cadena, String tipo,int linea, int columna) {
         this.cadena = cadena;
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;
+        salida = "Error "+tipo+" ; En linea "+linea+" Y columna"+columna;
     }
 
     public int getColumna() {
@@ -49,7 +50,8 @@ public class Error {
 
     @Override
     public String toString() {
-        return "Error{" + "cadena=" + cadena + ", linea=" + linea + ", columna=" + columna + '}';
+        return "Error{" + "cadena=" + cadena + ", linea=" + linea + ", columna=" + columna + ", tipo=" + tipo + '}';
     }
-    
+
+
 }
